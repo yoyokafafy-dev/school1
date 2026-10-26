@@ -41,7 +41,6 @@
         .card { background: var(--white); border-radius: 16px; padding: 2rem; box-shadow: 0 10px 25px rgba(0,0,0,0.05); margin-bottom: 2rem; border-top: 5px solid var(--secondary-blue); }
         .card h2 { color: var(--secondary-blue); margin-bottom: 1rem; font-size: 1.8rem; display: flex; align-items: center; gap: 10px; }
 
-        /* شبكة الـ 100 صندوق */
         .registration-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 15px; margin-top: 1.5rem; }
         .reg-box { background: var(--white); border: 2px dashed #CBD5E1; border-radius: 12px; height: 130px; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 8px; text-align: center; }
         .reg-box.filled { border: 2px solid var(--gold); background: linear-gradient(135deg, #FFFBEB, #FFFFFF); }
@@ -57,7 +56,6 @@
         
         .alert-box { background: #FEF3C7; border: 1px solid #F59E0B; color: #92400E; padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem; font-weight: 700; display: flex; align-items: center; gap: 10px; }
         
-        /* عجلة الحظ والمواجهة */
         .wheel-container { text-align: center; padding: 2rem; background: var(--bg-light); border-radius: 16px; border: 2px solid var(--gold); margin: 1.5rem 0; }
         .wheel-spinner { width: 180px; height: 180px; border: 8px solid var(--primary-navy); border-radius: 50%; margin: 20px auto; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle, var(--gold-light), var(--gold)); font-size: 1.2rem; font-weight: 900; color: var(--primary-navy); transition: transform 2.5s cubic-bezier(0.15, 0.95, 0.25, 1); box-shadow: 0 0 20px rgba(212,175,55,0.4); }
         
@@ -91,11 +89,11 @@
     </header>
 
     <main>
-        <!-- 1. الرئيسية -->
+        <!-- الرئيسية -->
         <section id="home" class="section-view active">
             <div class="card" style="text-align: center;">
                 <h2>مرحباً بكم في الموقع الرسمي لانتخابات المدارس</h2>
-                <p style="margin: 1rem 0; color:#475569;">منصة متكاملة لتنظيم الانتخابات والمواجهات المباشرة بين الطلاب لحظياً بين جميع الأجهزة.</p>
+                <p style="margin: 1rem 0; color:#475569;">منصة متكاملة لتنظيم الانتخابات والمواجهات المباشرة مع عداد سحابي دائم بين جميع الأجهزة.</p>
                 <div style="display:flex; gap:10px; justify-content:center;">
                     <button class="btn" onclick="switchView('register')">التسجيل في الانتخابات</button>
                     <button class="btn btn-gold" onclick="switchView('arena')">دخول ساحة المواجهة</button>
@@ -103,13 +101,13 @@
             </div>
         </section>
 
-        <!-- 2. التسجيل و 100 صندوق -->
+        <!-- التسجيل -->
         <section id="register" class="section-view">
             <div class="card">
                 <h2><i class="fa-solid fa-users"></i> التسجيل في 100 صندوق</h2>
                 
                 <div id="regTimerBox" class="alert-box">
-                    <i class="fa-solid fa-clock"></i> الوقت المتبقي للتسجيل: <span id="regTimerCount">30:00</span> دقيقة
+                    <i class="fa-solid fa-clock"></i> الوقت المتبقي للتسجيل السحابي: <span id="regTimerCount">30:00</span> دقيقة
                 </div>
 
                 <div id="registrationFormArea">
@@ -135,17 +133,15 @@
             </div>
         </section>
 
-        <!-- 3. ساحة المواجهة وعجلة الحظ -->
+        <!-- ساحة المواجهة -->
         <section id="arena" class="section-view">
             <div class="card">
                 <h2><i class="fa-solid fa-chess"></i> ساحة المواجهة (الجولة <span id="currentRoundDisplay">1</span> من 15)</h2>
                 
-                <!-- تنبيه عدم انتهاء وقت التسجيل -->
                 <div id="arenaLockedAlert" class="alert-box" style="background:#FEE2E2; color:#991B1B; border-color:#EF4444;">
-                    <i class="fa-solid fa-hourglass-half"></i> لسه ماخلصش وقت التسجيل! يرجى الانتظار حتى اكتمال التسجيل لبدء الجولات والمواجهات.
+                    <i class="fa-solid fa-hourglass-half"></i> لسه ماخلصش وقت التسجيل! يرجى الانتظار حتى اكتمال التسجيل لبدء الجولات.
                 </div>
 
-                <!-- قسم عجلة الحظ (يفتح بعد التسجيل) -->
                 <div id="wheelArea" style="display:none;" class="wheel-container">
                     <h3><i class="fa-solid fa-dharmachakra"></i> عجلة الحظ لاختيار المتنافسين</h3>
                     <p id="spinStatusText" style="margin: 10px 0; color:#475569;">اضغط لتدوير العجلة لاختيار المتنافسين</p>
@@ -153,7 +149,6 @@
                     <button id="btnSpinWheel" class="btn btn-gold" onclick="spinWheelTwice()"><i class="fa-solid fa-rotate"></i> تدوير عجلة الحظ (اللفة 1)</button>
                 </div>
 
-                <!-- بطاقات المواجهة والتصويت -->
                 <div id="matchupArea" style="display:none;">
                     <div class="alert-box">
                         <i class="fa-solid fa-stopwatch"></i> وقت التصويت للجولة المتبقي: <span id="voteTimerCount">90:00</span> دقيقة
@@ -184,7 +179,7 @@
             </div>
         </section>
 
-        <!-- 4. لوحة الشرف -->
+        <!-- لوحة الشرف -->
         <section id="leaderboard" class="section-view">
             <div class="card">
                 <h2><i class="fa-solid fa-trophy" style="color:var(--gold);"></i> لوحة شرف البطولة</h2>
@@ -196,7 +191,7 @@
             </div>
         </section>
 
-        <!-- 5. الحسابات -->
+        <!-- الحسابات -->
         <section id="auth" class="section-view">
             <div class="card" style="max-width:400px; margin:auto;">
                 <h2>تسجيل الحساب</h2>
@@ -213,7 +208,7 @@
             </div>
         </section>
 
-        <!-- 6. لوحة تحكم الأدمن -->
+        <!-- لوحة تحكم الأدمن -->
         <section id="admin" class="section-view">
             <div class="card">
                 <h2><i class="fa-solid fa-sliders"></i> لوحة تحكم وإعدادات الأدمن</h2>
@@ -221,9 +216,6 @@
                     <button class="btn" onclick="forceCloseRegAndStartArena()"><i class="fa-solid fa-lock"></i> إغلاق التسجيل وبدء المواجهات فوراً</button>
                     <button class="btn btn-danger" onclick="adminResetElection()"><i class="fa-solid fa-rotate-left"></i> إعادة ضبط الانتخابات (تصفير مع حفظ الحسابات)</button>
                 </div>
-
-                <h3>صندوق رسائل الإشعار:</h3>
-                <div id="adminInbox" style="background:var(--bg-light); border:1px solid #CBD5E1; padding:1rem; border-radius:8px; margin-top:10px; max-height:200px; overflow-y:auto;"></div>
             </div>
         </section>
     </main>
@@ -232,7 +224,7 @@
         <p>جميع الحقوق محفوظة &copy; 2026 - موقع انتخابات مدارس</p>
     </footer>
 
-    <!-- Firebase Realtime Database Script -->
+    <!-- Firebase Realtime Database Script with Cloud Timers -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-app.js";
         import { getDatabase, ref, set, push, onValue, remove } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-database.js";
@@ -250,42 +242,60 @@
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
-        // متغيرات الحالة
         let state = {
             currentUser: null,
             isAdmin: false,
-            regTimeLeft: 30 * 60,
-            regTimeFinished: false,
-            currentRound: 1,
             competitors: [],
             selectedComp1: null,
             selectedComp2: null,
-            spinStep: 1, // 1 للفة الأولى، 2 للفة الثانية
+            spinStep: 1,
             votes1: 0,
-            votes2: 0
+            votes2: 0,
+            currentRound: 1
         };
 
-        // العداد التنازلي للتسجيل (30 دقيقة)
-        let regTimer = setInterval(() => {
-            if(!state.regTimeFinished && state.regTimeLeft > 0) {
-                state.regTimeLeft--;
-                let m = Math.floor(state.regTimeLeft / 60).toString().padStart(2,'0');
-                let s = (state.regTimeLeft % 60).toString().padStart(2,'0');
-                document.getElementById('regTimerCount').innerText = `${m}:${s}`;
-            } else if(state.regTimeLeft <= 0 && !state.regTimeFinished) {
-                finishRegistrationTime();
-            }
-        }, 1000);
+        // 1. مزامنة بيانات التسجيل والعدادات السحابية لحظياً
+        onValue(ref(db, 'settings'), (snapshot) => {
+            const settings = snapshot.val() || {};
+            const regEndTime = settings.regEndTime || (Date.now() + 30 * 60 * 1000); // 30 دقيقة افتراضياً
+            const votingEndTime = settings.votingEndTime || 0;
+            state.currentRound = settings.currentRound || 1;
+            document.getElementById('currentRoundDisplay').innerText = state.currentRound;
 
-        function finishRegistrationTime() {
-            state.regTimeFinished = true;
+            // إذا لم يتم حفظ وقت النهاية بعد في السحابة، قم بتثبيته
+            if(!settings.regEndTime) {
+                set(ref(db, 'settings/regEndTime'), regEndTime);
+                set(ref(db, 'settings/currentRound'), 1);
+            }
+
+            // تشغيل العداد السحابي للتسجيل
+            runCloudRegTimer(regEndTime);
+        });
+
+        function runCloudRegTimer(endTime) {
+            clearInterval(window.cloudTimerInterval);
+            window.cloudTimerInterval = setInterval(() => {
+                const now = Date.now();
+                const timeLeft = Math.max(0, Math.floor((endTime - now) / 1000));
+
+                let m = Math.floor(timeLeft / 60).toString().padStart(2,'0');
+                let s = (timeLeft % 60).toString().padStart(2,'0');
+                document.getElementById('regTimerCount').innerText = `${m}:${s}`;
+
+                if(timeLeft <= 0) {
+                    finishRegistrationTimeUI();
+                }
+            }, 1000);
+        }
+
+        function finishRegistrationTimeUI() {
             document.getElementById('registrationFormArea').style.display = 'none';
             document.getElementById('regClosedMessage').style.display = 'flex';
             document.getElementById('arenaLockedAlert').style.display = 'none';
             document.getElementById('wheelArea').style.display = 'block';
         }
 
-        // الاستماع لتسجيلات المتسابقين سحابياً
+        // الاستماع للمتسابقين سحابياً
         onValue(ref(db, 'competitors'), (snapshot) => {
             const data = snapshot.val() || {};
             state.competitors = Object.values(data);
@@ -308,10 +318,9 @@
             }
         }
 
-        // إضافة متسابق
+        // تسجيل متسابق
         document.getElementById('competitorForm').addEventListener('submit', (e) => {
             e.preventDefault();
-            if(state.regTimeFinished) return alert('التسجيل مغلق حالياً!');
             if(state.competitors.length >= 100) return alert('اكتمل الـ 100 صندوق!');
 
             const name = document.getElementById('compName').value;
@@ -322,7 +331,7 @@
                 reader.onload = function(evt) {
                     const newRef = push(ref(db, 'competitors'));
                     set(newRef, { name: name, photo: evt.target.result }).then(() => {
-                        alert('تم تسسجيل المتسابق بنجاح في السحابة!');
+                        alert('تم تسجيل المتسابق بنجاح في السحابة!');
                         document.getElementById('competitorForm').reset();
                     });
                 };
@@ -344,7 +353,6 @@
                 spinner.style.transform = 'rotate(0deg)';
                 
                 if(state.spinStep === 1) {
-                    // اللفة الأولى: اختيار المتسابق الأول
                     let idx1 = Math.floor(Math.random() * state.competitors.length);
                     state.selectedComp1 = state.competitors[idx1];
                     spinner.innerText = state.selectedComp1.name;
@@ -352,7 +360,6 @@
                     btn.innerText = 'تدوير عجلة الحظ (اللفة 2)';
                     state.spinStep = 2;
                 } else {
-                    // اللفة الثانية: اختيار المتسابق الثاني
                     let idx2;
                     do {
                         idx2 = Math.floor(Math.random() * state.competitors.length);
@@ -363,7 +370,6 @@
 
                     alert(`تم اختيار المتنافسين بالجولة ${state.currentRound}:\n1️⃣ ${state.selectedComp1.name}\n2️⃣ ${state.selectedComp2.name}`);
 
-                    // عرض شاشة التصويت والمواجهة
                     document.getElementById('wheelArea').style.display = 'none';
                     document.getElementById('matchupArea').style.display = 'block';
 
@@ -377,13 +383,12 @@
 
                     state.votes1 = 0;
                     state.votes2 = 0;
-                    state.spinStep = 1; // إعادة الضبط للجولة القادمة
+                    state.spinStep = 1;
                     btn.innerText = 'تدوير عجلة الحظ (اللفة 1)';
                 }
             }, 2000);
         };
 
-        // تصويت
         window.castVote = function(num) {
             if(num === 1) {
                 state.votes1++;
@@ -395,65 +400,49 @@
             alert('تم تسجيل صوتك بنجاح!');
         };
 
-        // إنهاء الجولة
         window.finishRound = function() {
             let winner = state.votes1 >= state.votes2 ? state.selectedComp1.name : state.selectedComp2.name;
             alert(`🎉 الفائز في الجولة ${state.currentRound} هو: ${winner}`);
 
             if(state.currentRound < 15) {
                 state.currentRound++;
+                set(ref(db, 'settings/currentRound'), state.currentRound);
                 document.getElementById('currentRoundDisplay').innerText = state.currentRound;
                 document.getElementById('matchupArea').style.display = 'none';
                 document.getElementById('wheelArea').style.display = 'block';
                 document.getElementById('spinStatusText').innerText = 'اضغط لتدوير العجلة للجولة الجديدة';
                 document.getElementById('wheelSpinner').innerText = 'جاهز';
             } else {
-                // انتهاء الـ 15 جولة بالكامل
-                alert('🏆 انتهت الـ 15 جولة بالكامل! تم تحديد بطل البطولة، وأعيد فتح باب التسجيل للبطولة القادمة.');
+                alert('🏆 انتهت الـ 15 جولة بالكامل! تم تحديد بطل البطولة.');
                 document.getElementById('championNameDisplay').innerText = winner;
-
-                // إعادة فتح التسجيل
-                state.regTimeFinished = false;
-                state.regTimeLeft = 30 * 60;
-                state.currentRound = 1;
-                document.getElementById('currentRoundDisplay').innerText = 1;
-
-                document.getElementById('matchupArea').style.display = 'none';
-                document.getElementById('registrationFormArea').style.display = 'block';
-                document.getElementById('regClosedMessage').style.display = 'none';
-                document.getElementById('arenaLockedAlert').style.display = 'flex';
-                
                 switchView('leaderboard');
             }
         };
 
-        // إغلاق التسجيل يدوي من الأدمن
         window.forceCloseRegAndStartArena = function() {
-            finishRegistrationTime();
-            alert('تم إغلاق التسجيل وفتح ساحة المواجهة وعجلة الحظ!');
+            finishRegistrationTimeUI();
+            alert('تم إغلاق التسجيل وفتح ساحة المواجهة!');
             switchView('arena');
         };
 
-        // تصفير الانتخابات مع حفظ الحسابات
         window.adminResetElection = function() {
             if(confirm('هل تريد تصفير الانتخابات والصناديق مع الحفاظ التام على الحسابات والأدمن؟')) {
                 remove(ref(db, 'competitors')).then(() => {
-                    state.regTimeFinished = false;
-                    state.regTimeLeft = 30 * 60;
-                    state.currentRound = 1;
-                    document.getElementById('currentRoundDisplay').innerText = 1;
+                    const newRegEnd = Date.now() + 30 * 60 * 1000;
+                    set(ref(db, 'settings/regEndTime'), newRegEnd);
+                    set(ref(db, 'settings/currentRound'), 1);
+                    
                     document.getElementById('registrationFormArea').style.display = 'block';
                     document.getElementById('regClosedMessage').style.display = 'none';
                     document.getElementById('arenaLockedAlert').style.display = 'flex';
                     document.getElementById('wheelArea').style.display = 'none';
                     document.getElementById('matchupArea').style.display = 'none';
-                    alert('تمت إعادة ضبط الانتخابات بنجاح!');
+                    alert('تمت إعادة ضبط الانتخابات بنجاح وضبط العداد من جديد!');
                     switchView('home');
                 });
             }
         };
 
-        // مصادقة وتدقيق الحسابات سحابياً
         window.handleRegisterAccount = function() {
             const email = document.getElementById('authEmail').value;
             const pass = document.getElementById('authPassword').value;
@@ -519,14 +508,10 @@
 
         window.switchView = function(id) {
             document.querySelectorAll('.section-view').forEach(e => e.classList.remove('active'));
-            document.querySelectorAll('nav button').forEach(e => e.classList.remove('active'));
             document.getElementById(id).classList.add('active');
         };
     </script>
 </body>
 </html>
-
-
-
 
 
