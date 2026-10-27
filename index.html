@@ -64,6 +64,8 @@
         .stat-card h3 { font-size: 0.85rem; color: #94A3B8; margin-bottom: 0.4rem; }
         .stat-card .number { font-size: 1.5rem; font-weight: 900; color: var(--white); }
 
+        .winner-list-item { background: #0A192F; padding: 12px 18px; border-radius: 8px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; border-right: 4px solid var(--gold); }
+
         footer { background: var(--primary-navy); color: var(--white); text-align: center; padding: 1.5rem; margin-top: auto; border-top: 1px solid #334155; }
     </style>
 </head>
@@ -76,11 +78,11 @@
         </div>
         <nav>
             <ul>
-                <li><button onclick="switchView('home')" class="active"><i class="fa-solid fa-house"></i> الرئيسية</button></li>
+                <li><button onclick="switchView('arena')" class="active" id="navArenaBtn"><i class="fa-solid fa-chess-board"></i> ساحة المواجهة وعجلة الحظ</button></li>
                 <li><button onclick="switchView('register')"><i class="fa-solid fa-users"></i> صناديق المتسابقين (100)</button></li>
-                <li><button onclick="switchView('arena')"><i class="fa-solid fa-chess-board"></i> ساحة المواجهة وعجلة الحظ</button></li>
-                <li><button onclick="switchView('leaderboard')"><i class="fa-solid fa-trophy"></i> لوحة المتصدرين والجوائز</button></li>
-                <li id="navAdminItem" style="display:none;"><button onclick="switchView('admin')" class="admin-badge"><i class="fa-solid fa-gauge"></i> لوحة تحكم الأدمن</button></li>
+                <li><button onclick="switchView('roundWinners')"><i class="fa-solid fa-list-check"></i> لوحة المتصدرين في الجولات</button></li>
+                <li><button onclick="switchView('leaderboard')"><i class="fa-solid fa-trophy"></i> الكأس الذهبي</button></li>
+                <li id="navAdminItem" style="display:none;"><button onclick="switchView('admin')" class="admin-badge"><i class="fa-solid fa-gauge"></i> لوحة التحكم والأقسام</button></li>
                 <li id="authNavItem"><button onclick="switchView('auth')" class="btn-gold"><i class="fa-solid fa-right-to-bracket"></i> تسجيل الدخول</button></li>
                 <li id="userGreeting" style="display:none; color: var(--gold); font-weight:700;"></li>
                 <li id="logoutNavItem" style="display:none;"><button onclick="logout()" class="btn-danger">خروج</button></li>
@@ -89,67 +91,21 @@
     </header>
 
     <main>
-        <!-- الرئيسية -->
-        <section id="home" class="section-view active">
-            <div class="card" style="text-align: center; padding: 3rem;">
-                <i class="fa-solid fa-award" style="font-size: 4rem; color: var(--gold); margin-bottom: 1rem;"></i>
-                <h2>مرحباً بكم في الموقع الرسمي لانتخابات المدارس</h2>
-                <p style="color: #94A3B8; max-width: 700px; margin: 1rem auto 2rem auto;">
-                    منصة رقمية متكاملة لإدارة المنافسات والتسجيل السحابي المباشر بدعم كامِل من Firebase وعدادات تنازلية سحابية لا تتوقف عند إغلاق المتصفح[cite: 1].
-                </p>
-                <div style="display: flex; gap: 15px; justify-content: center;">
-                    <button class="btn" onclick="switchView('register')"><i class="fa-solid fa-user-plus"></i> تصفح صناديق التسجيل</button>
-                    <button class="btn btn-gold" onclick="switchView('arena')"><i class="fa-solid fa-play"></i> ساحة المواجهة</button>
-                </div>
-            </div>
-        </section>
-
-        <!-- التسجيل و 100 صندوق -->
-        <section id="register" class="section-view">
+        <!-- ساحة المواجهة وعجلة الحظ (الصفحة الافتتاحية) -->
+        <section id="arena" class="section-view active">
             <div class="card">
-                <h2><i class="fa-solid fa-boxes-stacked"></i> قائمة الصناديق الـ 100 للمسجلين</h2>
-                <div class="alert-box">
-                    <i class="fa-solid fa-clock"></i> مرحلة التسجيل (سحابي متواصل): <span id="regTimerCount" style="font-size: 1.2rem; margin-right: 5px;">جاري التحميل...</span>
-                </div>
-
-                <div id="registrationFormArea" style="background: #0A192F; padding: 1.5rem; border-radius: 12px; margin-bottom: 2rem;">
-                    <h3 style="color: var(--white); margin-bottom: 1rem; font-size: 1.1rem;">تسجيل متسابق جديد في الصندوق المتاح</h3>
-                    <form id="competitorForm">
-                        <div class="form-group">
-                            <label>اسم المتسابق الكامل:</label>
-                            <input type="text" id="compName" required placeholder="أدخل اسمك هنا...">
-                        </div>
-                        <div class="form-group">
-                            <label>صورة الملف الشخصي:</label>
-                            <input type="file" id="compPhoto" accept="image/*" required>
-                        </div>
-                        <button type="submit" class="btn"><i class="fa-solid fa-check"></i> تأكيد التسجيل وإرسال للسحابة</button>
-                    </form>
-                </div>
-
-                <div id="regClosedMessage" style="display:none;" class="alert-box" style="background: rgba(239,68,68,0.1); border-color: var(--danger); color: #FCA5A5;">
-                    <i class="fa-solid fa-lock"></i> تم إغلاق باب التسجيل وفتح ساحة المواجهات والجولات[cite: 1]!
-                </div>
-
-                <h3 style="color: var(--white); margin-top: 1rem;">الصناديق المتاحة (<span id="compCountDisplay">0</span> / 100)</h3>
-                <div class="registration-grid" id="registrationGrid"></div>
-            </div>
-        </section>
-
-        <!-- ساحة المواجهة وعجلة الحظ -->
-        <section id="arena" class="section-view">
-            <div class="card">
-                <h2><i class="fa-solid fa-chess-board"></i> ساحة المواجهة وعجلة الحظ[cite: 1]</h2>
+                <h2><i class="fa-solid fa-chess-board"></i> ساحة المواجهة وعجلة الحظ الذكية</h2>
                 
                 <div id="arenaLockedAlert" class="alert-box" style="background: rgba(239,68,68,0.1); border-color: var(--danger); color: #FCA5A5;">
-                    <i class="fa-solid fa-hourglass-half"></i> لم ينتهِ وقت التسجيل بعد! يرجى الانتظار لحين انتهاء العداد السحابي أو قيام الأدمن بفتح الجولات[cite: 1].
+                    <i class="fa-solid fa-hourglass-half"></i> لم يتم بدء الجولات بعد أو أن الوقت لم يحن. يرجى الانتظار لحين قيام الأدمن بتدوير عجلة الحظ!
                 </div>
 
                 <div id="wheelArea" style="display:none; text-align:center; background:#0A192F; padding:2rem; border-radius:12px; border:2px solid var(--gold);">
-                    <h3 style="color:var(--gold);"><i class="fa-solid fa-dharmachakra"></i> عجلة الحظ التفاعلية[cite: 1]</h3>
-                    <p id="spinStatusText" style="color:#94A3B8; margin:10px 0;">اضغط لتدوير العجلة واختيار المتنافسين تباعاً</p>
+                    <h3 style="color:var(--gold);"><i class="fa-solid fa-dharmachakra"></i> عجلة الحظ التفاعلية (خاصة بالأدمن فقط)</h3>
+                    <p id="spinStatusText" style="color:#94A3B8; margin:10px 0;">الأدمن وحده يمكنه تدوير العجلة لاختيار المتنافسين وإظهارهم للجميع</p>
                     <div style="width:160px; height:160px; border:6px solid var(--gold); border-radius:50%; margin:20px auto; display:flex; align-items:center; justify-content:center; background: radial-gradient(circle, var(--gold-light), var(--gold)); font-weight:900; color:var(--primary-navy); font-size:1.1rem; box-shadow:0 0 20px rgba(212,175,55,0.4);" id="wheelSpinner">جاهز</div>
-                    <button id="btnSpinWheel" class="btn btn-gold" onclick="spinWheelTwice()"><i class="fa-solid fa-rotate"></i> تدوير العجلة (اللفة 1)</button>
+                    <button id="btnSpinWheel" class="btn btn-gold" onclick="spinWheelTwice()" style="display:none;"><i class="fa-solid fa-rotate"></i> تدوير عجلة الحظ (للأدمن)</button>
+                    <p id="notAdminNotice" style="color: #F87171; font-weight: bold; margin-top: 10px; display: none;"><i class="fa-solid fa-triangle-exclamation"></i> عذراً، تدوير العجلة متاح للأدمن فقط.</p>
                 </div>
 
                 <div id="matchupArea" style="display:none; margin-top:2rem;">
@@ -176,20 +132,60 @@
                         </div>
                     </div>
 
-                    <div style="text-align:center; margin-top:2rem;">
-                        <button class="btn btn-gold" onclick="finishRound()"><i class="fa-solid fa-award"></i> إنهاء الجولة وإعلان الفائز</button>
+                    <div style="text-align:center; margin-top:2rem;" id="aiFinishContainer">
+                        <button class="btn btn-gold" onclick="aiDeclareWinner()" id="btnAiFinish" style="display:none;"><i class="fa-solid fa-robot"></i> الذكاء الاصطناعي: إنهاء الجولة وإعلان الفائز</button>
+                        <p id="aiWaitingText" style="color: #94A3B8; margin-top: 10px; font-size: 0.9rem;"><i class="fa-solid fa-circle-notch fa-spin"></i> الذكاء الاصطناعي يراقب الأصوات وسيُعلن الفائز تلقائياً عند انتهاء الـ 90 دقيقة أو بقرار الأدمن.</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- لوحة المتصدرين والجوائز -->
+        <!-- صناديق المتسابقين -->
+        <section id="register" class="section-view">
+            <div class="card">
+                <h2><i class="fa-solid fa-boxes-stacked"></i> قائمة الصناديق الـ 100 للمسجلين</h2>
+                <div class="alert-box">
+                    <i class="fa-solid fa-clock"></i> مرحلة التسجيل المفتوحة: <span id="regTimerCount" style="font-size: 1.2rem; margin-right: 5px;">جاري التحميل...</span>
+                </div>
+
+                <div id="registrationFormArea" style="background: #0A192F; padding: 1.5rem; border-radius: 12px; margin-bottom: 2rem;">
+                    <h3 style="color: var(--white); margin-bottom: 1rem; font-size: 1.1rem;">تسجيل متسابق جديد في الصندوق المتاح</h3>
+                    <form id="competitorForm">
+                        <div class="form-group">
+                            <label>اسم المتسابق الكامل:</label>
+                            <input type="text" id="compName" required placeholder="أدخل اسمك هنا...">
+                        </div>
+                        <div class="form-group">
+                            <label>صورة الملف الشخصي:</label>
+                            <input type="file" id="compPhoto" accept="image/*" required>
+                        </div>
+                        <button type="submit" class="btn"><i class="fa-solid fa-check"></i> تأكيد التسجيل وإرسال للسحابة</button>
+                    </form>
+                </div>
+
+                <h3 style="color: var(--white); margin-top: 1rem;">الصناديق المتاحة (<span id="compCountDisplay">0</span> / 100)</h3>
+                <div class="registration-grid" id="registrationGrid"></div>
+            </div>
+        </section>
+
+        <!-- لوحة المتصدرين في الجولات (الجديدة) -->
+        <section id="roundWinners" class="section-view">
+            <div class="card">
+                <h2><i class="fa-solid fa-list-check" style="color: var(--gold);"></i> لوحة المتصدرين في الجولات</h2>
+                <p style="color:#94A3B8; margin-bottom:1.5rem;">هنا تجد سجل الفائزين بكل جولة من جولات البطولة الـ 15:</p>
+                <div id="roundWinnersList">
+                    <p style="color: #64748B; text-align: center; padding: 2rem;">لم يتم إنهاء أي جولة بعد...</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- الكأس الذهبي -->
         <section id="leaderboard" class="section-view">
             <div class="card">
-                <h2><i class="fa-solid fa-trophy" style="color: var(--gold);"></i> لوحة المتصدرين والكأس الذهبي</h2>
+                <h2><i class="fa-solid fa-trophy" style="color: var(--gold);"></i> الكأس الذهبي (البطل النهائي)</h2>
                 <div style="background: linear-gradient(135deg, rgba(212,175,55,0.1), rgba(30,58,138,0.2)); padding: 2rem; border-radius: 12px; border: 2px solid var(--gold); text-align: center;">
                     <i class="fa-solid fa-crown" style="font-size: 4rem; color: var(--gold); margin-bottom: 1rem;"></i>
-                    <h3 style="color: var(--gold); font-size: 1.4rem;">بطل أبطال المدارس (الكأس الذهبي)</h3>
+                    <h3 style="color: var(--gold); font-size: 1.4rem;">بطل أبطال المدارس</h3>
                     <p id="championNameDisplay" style="font-size: 1.2rem; font-weight: bold; color: var(--white); margin-top: 10px;">في انتظار اكتمال الـ 15 جولة بالكامل...</p>
                 </div>
             </div>
@@ -198,8 +194,8 @@
         <!-- تسجيل الدخول -->
         <section id="auth" class="section-view">
             <div class="card" style="max-width: 450px; margin: 0 auto;">
-                <h2><i class="fa-solid fa-lock"></i> تسجيل الدخول أو حساب الأدمن[cite: 1]</h2>
-                <p style="color:#94A3B8; font-size:0.85rem; margin-bottom:1.5rem;">(أول شخص يقوم بإنشاء حساب في السحابة سيحصل تلقائياً على صلاحيات الأدمن الرئيسي)[cite: 1]</p>
+                <h2><i class="fa-solid fa-lock"></i> تسجيل الدخول / حساب الأدمن</h2>
+                <p style="color:#94A3B8; font-size:0.85rem; margin-bottom:1.5rem;">(أول شخص يسجل حساباً يصبح الأدمن ويتم حفظ دخوله تلقائياً على جهازك)</p>
                 <div class="form-group">
                     <label>اسم المستخدم أو الإيميل:</label>
                     <input type="text" id="authEmail" placeholder="أدخل البريد أو اسم المستخدم...">
@@ -209,8 +205,8 @@
                     <input type="password" id="authPassword" placeholder="أدخل كلمة المرور...">
                 </div>
                 <div style="display:flex; gap:10px;">
-                    <button onclick="handleLogin()" class="btn" style="flex:1;"><i class="fa-solid fa-right-to-bracket"></i> دخول[cite: 1]</button>
-                    <button onclick="handleRegisterAccount()" class="btn btn-gold" style="flex:1;"><i class="fa-solid fa-user-plus"></i> إنشاء حساب[cite: 1]</button>
+                    <button onclick="handleLogin()" class="btn" style="flex:1;"><i class="fa-solid fa-right-to-bracket"></i> دخول</button>
+                    <button onclick="handleRegisterAccount()" class="btn btn-gold" style="flex:1;"><i class="fa-solid fa-user-plus"></i> إنشاء حساب</button>
                 </div>
             </div>
         </section>
@@ -218,12 +214,12 @@
         <!-- لوحة التحكم للأدمن -->
         <section id="admin" class="section-view">
             <div class="card">
-                <h2><i class="fa-solid fa-gauge-high"></i> لوحة تحكم الأدمن والتحكم السحابي[cite: 1]</h2>
+                <h2><i class="fa-solid fa-gauge-high"></i> لوحة تحكم الأدمن والتحكم السحابي</h2>
                 
                 <div class="dashboard-grid">
                     <div class="stat-card">
                         <h3>حالة النظام السحابي</h3>
-                        <div class="number" style="color: var(--success); font-size: 1.1rem;"><i class="fa-solid fa-circle-check"></i> متصل بـ Firebase[cite: 1]</div>
+                        <div class="number" style="color: var(--success); font-size: 1.1rem;"><i class="fa-solid fa-circle-check"></i> متصل بـ Firebase</div>
                     </div>
                     <div class="stat-card gold">
                         <h3>المتسابقون المسجلون</h3>
@@ -236,10 +232,9 @@
                 </div>
 
                 <div style="display: flex; gap: 15px; flex-wrap: wrap; margin-top: 1.5rem;">
-                    <button class="btn" onclick="forceCloseRegAndStartArena()"><i class="fa-solid fa-lock"></i> إغلاق التسجيل وبدء ساحة المواجهة فوراً[cite: 1]</button>
-                    <!-- الزر الجديد المطلوب لإعادة الجولات من البداية مع الحفاظ على الحسابات والمرشحين -->
+                    <button class="btn" onclick="forceCloseRegAndStartArena()"><i class="fa-solid fa-lock"></i> إغلاق التسجيل وبدء ساحة المواجهة فوراً</button>
                     <button class="btn btn-gold" onclick="resetRoundsOnly()"><i class="fa-solid fa-rotate-right"></i> إعادة جولات البطولة من البداية (الجولة 1)</button>
-                    <button class="btn btn-danger" onclick="adminResetElection()"><i class="fa-solid fa-trash-can"></i> إعادة ضبط المصنع (حذف الحسابات والمرشحين تماماً)[cite: 1]</button>
+                    <button class="btn btn-danger" onclick="adminResetElection()"><i class="fa-solid fa-trash-can"></i> إعادة ضبط المصنع (حذف الحسابات والمرشحين تماماً)</button>
                 </div>
             </div>
         </section>
@@ -276,9 +271,22 @@
             spinStep: 1,
             votes1: 0,
             votes2: 0,
-            currentRound: 1
+            currentRound: 1,
+            roundWinners: []
         };
 
+        // التحقق من الحساب المحفوظ مسبقاً في المتصفح لتسجيل الدخول التلقائي
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedUser = localStorage.getItem('school_election_user');
+            const savedIsAdmin = localStorage.getItem('school_election_isAdmin') === 'true';
+            if(savedUser) {
+                state.currentUser = savedUser;
+                state.isAdmin = savedIsAdmin;
+                updateAuthUI();
+            }
+        });
+
+        // مزامنة الإعدادات والعدادات سحابياً
         onValue(ref(db, 'settings'), (snapshot) => {
             const settings = snapshot.val() || {};
             const regEndTime = settings.regEndTime || (Date.now() + 30 * 60 * 1000); 
@@ -298,14 +306,70 @@
             if (votingEndTime > 0) {
                 runCloudVotingTimer(votingEndTime);
             }
+
+            // فحص حالة العجلة والمتنافسين المختارين سحابياً
+            if (settings.matchupActive && settings.comp1 && settings.comp2) {
+                document.getElementById('arenaLockedAlert').style.display = 'none';
+                document.getElementById('wheelArea').style.display = 'none';
+                document.getElementById('matchupArea').style.display = 'block';
+
+                state.selectedComp1 = settings.comp1;
+                state.selectedComp2 = settings.comp2;
+                state.votes1 = settings.votes1 || 0;
+                state.votes2 = settings.votes2 || 0;
+
+                document.getElementById('c1Photo').src = state.selectedComp1.photo;
+                document.getElementById('c1Name').innerText = state.selectedComp1.name;
+                document.getElementById('c1Votes').innerText = state.votes1;
+
+                document.getElementById('c2Photo').src = state.selectedComp2.photo;
+                document.getElementById('c2Name').innerText = state.selectedComp2.name;
+                document.getElementById('c2Votes').innerText = state.votes2;
+            } else if (settings.regFinished) {
+                document.getElementById('arenaLockedAlert').style.display = 'none';
+                document.getElementById('wheelArea').style.display = 'block';
+                document.getElementById('matchupArea').style.display = 'none';
+                
+                // إظهار زر العجلة للأدمن فقط وحجبها عن الباقين
+                if (state.isAdmin) {
+                    document.getElementById('btnSpinWheel').style.display = 'inline-flex';
+                    document.getElementById('notAdminNotice').style.display = 'none';
+                } else {
+                    document.getElementById('btnSpinWheel').style.display = 'none';
+                    document.getElementById('notAdminNotice').style.display = 'block';
+                }
+            } else {
+                document.getElementById('arenaLockedAlert').style.display = 'flex';
+                document.getElementById('wheelArea').style.display = 'none';
+                document.getElementById('matchupArea').style.display = 'none';
+            }
         });
+
+        // مزامنة سجل الفائزين في الجولات للوحة المتصدرين
+        onValue(ref(db, 'roundWinners'), (snapshot) => {
+            const data = snapshot.val() || {};
+            state.roundWinners = Object.values(data);
+            renderRoundWinners();
+        });
+
+        function renderRoundWinners() {
+            const container = document.getElementById('roundWinnersList');
+            if (state.roundWinners.length === 0) {
+                container.innerHTML = '<p style="color: #64748B; text-align: center; padding: 2rem;">لم يتم إنهاء أي جولة بعد...</p>';
+                return;
+            }
+            container.innerHTML = '';
+            state.roundWinners.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'winner-list-item';
+                div.innerHTML = `<span><i class="fa-solid fa-award" style="color:var(--gold); margin-left:8px;"></i> الجولة رقم ${item.round}: <strong>${item.winner}</strong></span> <span style="font-size:0.85rem; color:#94A3B8;">تم الفوز بنجاح</span>`;
+                container.appendChild(div);
+            });
+        }
 
         function runCloudRegTimer(endTime, isFinished) {
             clearInterval(window.cloudRegInterval);
-            if(isFinished) {
-                finishRegistrationTimeUI();
-                return;
-            }
+            if(isFinished) return;
 
             window.cloudRegInterval = setInterval(() => {
                 const now = Date.now();
@@ -316,7 +380,7 @@
                 document.getElementById('regTimerCount').innerText = `${m}:${s} دقيقة متبقية`;
 
                 if(timeLeft <= 0) {
-                    finishRegistrationTimeUI();
+                    document.getElementById('registrationFormArea').style.display = 'none';
                 }
             }, 1000);
         }
@@ -331,17 +395,14 @@
                 let s = (timeLeft % 60).toString().padStart(2,'0');
                 document.getElementById('voteTimerCount').innerText = `${m}:${s}`;
 
+                // إذا انتهى الـ 90 دقيقة، يقوم الذكاء الاصطناعي بإعلان الفائز تلقائياً إذا كان أدمن أو يتم التنبيه
                 if(timeLeft <= 0) {
                     clearInterval(window.cloudVoteInterval);
+                    if(state.isAdmin) {
+                        aiDeclareWinner();
+                    }
                 }
             }, 1000);
-        }
-
-        function finishRegistrationTimeUI() {
-            document.getElementById('registrationFormArea').style.display = 'none';
-            document.getElementById('regClosedMessage').style.display = 'flex';
-            document.getElementById('arenaLockedAlert').style.display = 'none';
-            document.getElementById('wheelArea').style.display = 'block';
         }
 
         onValue(ref(db, 'competitors'), (snapshot) => {
@@ -387,137 +448,103 @@
             }
         });
 
+        // تدوير عجلة الحظ (للأدمن فقط وتظهر النتيجة للجميع سحابياً)
         window.spinWheelTwice = function() {
+            if(!state.isAdmin) return alert('عذراً، تدوير عجلة الحظ متاح للأدمن فقط!');
             if(state.competitors.length < 2) return alert('يجب تسجيل متسابقين اثنين على الأقل لبدء الجولة!');
             
             const spinner = document.getElementById('wheelSpinner');
-            const btn = document.getElementById('btnSpinWheel');
-            const statusText = document.getElementById('spinStatusText');
-
             spinner.style.transform = 'rotate(720deg)';
             
             setTimeout(() => {
                 spinner.style.transform = 'rotate(0deg)';
                 
-                if(state.spinStep === 1) {
-                    let idx1 = Math.floor(Math.random() * state.competitors.length);
-                    state.selectedComp1 = state.competitors[idx1];
-                    spinner.innerText = state.selectedComp1.name;
-                    statusText.innerText = `تم اختيار المتسابق الأول: (${state.selectedComp1.name}). اضغط لتدوير اللفة الثانية!`;
-                    btn.innerText = 'تدوير العجلة (اللفة 2)';
-                    state.spinStep = 2;
-                } else {
-                    let idx2;
-                    do {
-                        idx2 = Math.floor(Math.random() * state.competitors.length);
-                    } while(state.competitors[idx2].name === state.selectedComp1.name && state.competitors.length > 1);
+                let idx1 = Math.floor(Math.random() * state.competitors.length);
+                let idx2;
+                do {
+                    idx2 = Math.floor(Math.random() * state.competitors.length);
+                } while(idx2 === idx1 && state.competitors.length > 1);
 
-                    state.selectedComp2 = state.competitors[idx2];
-                    spinner.innerText = state.selectedComp2.name;
+                let comp1 = state.competitors[idx1];
+                let comp2 = state.competitors[idx2];
+                let votingEndTime = Date.now() + 90 * 60 * 1000;
 
-                    const votingEndTime = Date.now() + 90 * 60 * 1000;
-                    set(ref(db, 'settings/votingEndTime'), votingEndTime);
+                // تحديث السيرفر بالمتنافسين الجدد ليراهم كل من في الموقع فوراً
+                set(ref(db, 'settings/matchupActive'), true);
+                set(ref(db, 'settings/comp1'), comp1);
+                set(ref(db, 'settings/comp2'), comp2);
+                set(ref(db, 'settings/votes1'), 0);
+                set(ref(db, 'settings/votes2'), 0);
+                set(ref(db, 'settings/votingEndTime'), votingEndTime);
 
-                    alert(`تم اختيار المتنافسين بالجولة ${state.currentRound}:\n1️⃣ ${state.selectedComp1.name}\n2️⃣ ${state.selectedComp2.name}`);
-
-                    document.getElementById('wheelArea').style.display = 'none';
-                    document.getElementById('matchupArea').style.display = 'block';
-
-                    document.getElementById('c1Photo').src = state.selectedComp1.photo;
-                    document.getElementById('c1Name').innerText = state.selectedComp1.name;
-                    document.getElementById('c1Votes').innerText = 0;
-
-                    document.getElementById('c2Photo').src = state.selectedComp2.photo;
-                    document.getElementById('c2Name').innerText = state.selectedComp2.name;
-                    document.getElementById('c2Votes').innerText = 0;
-
-                    state.votes1 = 0;
-                    state.votes2 = 0;
-                    state.spinStep = 1;
-                    btn.innerText = 'تدوير العجلة (اللفة 1)';
-                }
+                alert(`تم تدوير العجلة بنجاح!\nالمتنافسان في الجولة ${state.currentRound}:\n1️⃣ ${comp1.name}\n2️⃣ ${comp2.name}`);
             }, 1500);
         };
 
         window.castVote = function(num) {
+            if(!state.selectedComp1 || !state.selectedComp2) return;
             if(num === 1) {
                 state.votes1++;
-                document.getElementById('c1Votes').innerText = state.votes1;
+                set(ref(db, 'settings/votes1'), state.votes1);
             } else {
                 state.votes2++;
-                document.getElementById('c2Votes').innerText = state.votes2;
+                set(ref(db, 'settings/votes2'), state.votes2);
             }
             alert('تم تسجيل صوتك بنجاح في السحابة!');
         };
 
-        window.finishRound = function() {
-            let winner = state.votes1 >= state.votes2 ? state.selectedComp1.name : state.selectedComp2.name;
-            alert(`🎉 الفائز في الجولة ${state.currentRound} هو: ${winner}`);
+        // الذكاء الاصطناعي لإعلان الفائز وحفظه في لوحة المتصدرين للجولات
+        window.aiDeclareWinner = function() {
+            if(!state.isAdmin) return;
+            let winnerObj = state.votes1 >= state.votes2 ? state.selectedComp1 : state.selectedComp2;
+            let winnerName = winnerObj.name;
+
+            alert(`🤖 [الذكاء الاصطناعي]: بعد تحليل الأصوات، الفائز في الجولة ${state.currentRound} هو: ${winnerName}!`);
+
+            // حفظ الفائز في جدول الجولات
+            const newWinnerRef = push(ref(db, 'roundWinners'));
+            set(newWinnerRef, { round: state.currentRound, winner: winnerName });
 
             if(state.currentRound < 15) {
-                state.currentRound++;
-                set(ref(db, 'settings/currentRound'), state.currentRound);
+                let nextRound = state.currentRound + 1;
+                set(ref(db, 'settings/currentRound'), nextRound);
+                set(ref(db, 'settings/matchupActive'), false);
                 set(ref(db, 'settings/votingEndTime'), 0);
-                document.getElementById('matchupArea').style.display = 'none';
-                document.getElementById('wheelArea').style.display = 'block';
-                document.getElementById('spinStatusText').innerText = 'اضغط لتدوير العجلة للجولة الجديدة';
-                document.getElementById('wheelSpinner').innerText = 'جاهز';
             } else {
-                alert('🏆 انتهت الـ 15 جولة بالكامل! تم تتويج بطل أبطال المدارس.');
-                document.getElementById('championNameDisplay').innerText = winner;
+                alert('🏆 انتهت الـ 15 جولة بالكامل! تم بتتويج بطل أبطال المدارس نهائياً.');
+                document.getElementById('championNameDisplay').innerText = winnerName;
                 switchView('leaderboard');
             }
         };
 
         window.forceCloseRegAndStartArena = function() {
             set(ref(db, 'settings/regFinished'), true);
-            finishRegistrationTimeUI();
-            alert('تم إغلاق التسجيل وفتح ساحة المواجهة[cite: 1]!');
+            alert('تم إغلاق التسجيل وفتح ساحة المواجهة للأدمن لتدوير العجلة!');
             switchView('arena');
         };
 
-        // دالة الزر الجديد: إعادة جولات البطولة فقط للبداية مع الحفاظ على الحسابات والمرشحين
         window.resetRoundsOnly = function() {
             if(confirm('هل تريد إعادة جولات البطولة لتصبح من الجولة 1 مع الحفاظ على الحسابات والمرشحين؟')) {
                 set(ref(db, 'settings/currentRound'), 1);
                 set(ref(db, 'settings/votingEndTime'), 0);
+                set(ref(db, 'settings/matchupActive'), false);
                 set(ref(db, 'settings/regFinished'), true);
-                
-                document.getElementById('matchupArea').style.display = 'none';
-                document.getElementById('wheelArea').style.display = 'block';
-                document.getElementById('spinStatusText').innerText = 'اضغط لتدوير العجلة للجولة الأولى';
-                document.getElementById('wheelSpinner').innerText = 'جاهز';
-                
+                remove(ref(db, 'roundWinners'));
                 alert('تمت إعادة ضبط الجولات بنجاح لتصبح من الجولة 1!');
                 switchView('arena');
             }
         };
 
-        // زر إعادة ضبط المصنع الشامل (يحذف الحسابات والمرشحين بالكامل)
         window.adminResetElection = function() {
-            if(confirm('تحذير: هل أنت متأكد من مسح جميع الحسابات والمرشحين بالكامل والبدء من جديد؟[cite: 1]')) {
+            if(confirm('تحذير: مسح جميع الحسابات والمرشحين تماماً والبدء من جديد؟')) {
                 Promise.all([
                     remove(ref(db, 'competitors')),
                     remove(ref(db, 'users')),
-                    remove(ref(db, 'settings'))
+                    remove(ref(db, 'settings')),
+                    remove(ref(db, 'roundWinners'))
                 ]).then(() => {
-                    const newRegEnd = Date.now() + 30 * 60 * 1000;
-                    set(ref(db, 'settings/regEndTime'), newRegEnd);
-                    set(ref(db, 'settings/regFinished'), false);
-                    set(ref(db, 'settings/currentRound'), 1);
-                    set(ref(db, 'settings/votingEndTime'), 0);
-                    
-                    state.currentUser = null;
-                    state.isAdmin = false;
-                    updateAuthUI();
-
-                    document.getElementById('registrationFormArea').style.display = 'block';
-                    document.getElementById('regClosedMessage').style.display = 'none';
-                    document.getElementById('arenaLockedAlert').style.display = 'flex';
-                    document.getElementById('wheelArea').style.display = 'none';
-                    document.getElementById('matchupArea').style.display = 'none';
-                    
-                    alert('تمت إعادة ضبط المصنع ومسح كافة الحسابات بنجاح[cite: 1]!');
+                    localStorage.clear();
+                    alert('تمت إعادة ضبط المصنع ومسح كافة الحسابات بنجاح!');
                     window.location.reload();
                 });
             }
@@ -536,13 +563,13 @@
                 set(ref(db, 'users/' + userKey), { email, pass, isAdmin: isFirst }).then(() => {
                     state.currentUser = email;
                     state.isAdmin = isFirst;
-                    alert(isFirst ? 'تم إنشاء الحساب، وأنت الأدمن الرئيسي للموقع![cite: 1]' : 'تم إنشاء الحساب بنجاح كعضو عادي.[cite: 1]');
+                    // حفظ الدخول تلقائياً في المتصفح
+                    localStorage.setItem('school_election_user', email);
+                    localStorage.setItem('school_election_isAdmin', isFirst);
+
+                    alert(isFirst ? 'تم إنشاء الحساب، وأنت الأدمن الرئيسي للموقع!' : 'تم إنشاء الحساب بنجاح كعضو عادي.');
                     updateAuthUI();
-                    if(state.isAdmin) {
-                        switchView('admin');
-                    } else {
-                        switchView('home');
-                    }
+                    switchView(isFirst ? 'admin' : 'arena');
                 });
             }, { onlyOnce: true });
         };
@@ -559,13 +586,13 @@
                 if(u && u.pass === pass) {
                     state.currentUser = u.email;
                     state.isAdmin = u.isAdmin;
+                    // حفظ الدخول تلقائياً في المتصفح
+                    localStorage.setItem('school_election_user', u.email);
+                    localStorage.setItem('school_election_isAdmin', u.isAdmin);
+
                     alert(`أهلاً بك ${u.email}`);
                     updateAuthUI();
-                    if(state.isAdmin) {
-                        switchView('admin');
-                    } else {
-                        switchView('home');
-                    }
+                    switchView(state.isAdmin ? 'admin' : 'arena');
                 } else {
                     alert('بيانات الدخول غير صحيحة!');
                 }
@@ -578,29 +605,39 @@
                 document.getElementById('logoutNavItem').style.display = 'block';
                 document.getElementById('userGreeting').style.display = 'block';
                 document.getElementById('userGreeting').innerText = state.currentUser;
-                if(state.isAdmin) document.getElementById('navAdminItem').style.display = 'block';
+                if(state.isAdmin) {
+                    document.getElementById('navAdminItem').style.display = 'block';
+                    document.getElementById('btnAiFinish').style.display = 'inline-flex';
+                } else {
+                    document.getElementById('navAdminItem').style.display = 'none';
+                    document.getElementById('btnAiFinish').style.display = 'none';
+                }
             } else {
                 document.getElementById('authNavItem').style.display = 'block';
                 document.getElementById('logoutNavItem').style.display = 'none';
                 document.getElementById('userGreeting').style.display = 'none';
                 document.getElementById('navAdminItem').style.display = 'none';
+                document.getElementById('btnAiFinish').style.display = 'none';
             }
         }
 
         window.logout = function() {
             state.currentUser = null;
             state.isAdmin = false;
+            localStorage.clear();
             updateAuthUI();
-            switchView('home');
+            switchView('auth');
         };
 
         window.switchView = function(id) {
             document.querySelectorAll('.section-view').forEach(e => e.classList.remove('active'));
             document.getElementById(id).classList.add('active');
+            document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
         };
     </script>
 </body>
 </html>
+
 
 
 
