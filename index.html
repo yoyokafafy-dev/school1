@@ -237,7 +237,9 @@
 
                 <div style="display: flex; gap: 15px; flex-wrap: wrap; margin-top: 1.5rem;">
                     <button class="btn" onclick="forceCloseRegAndStartArena()"><i class="fa-solid fa-lock"></i> إغلاق التسجيل وبدء ساحة المواجهة فوراً[cite: 1]</button>
-                    <button class="btn btn-danger" onclick="adminResetElection()"><i class="fa-solid fa-rotate-left"></i> إعادة ضبط المصنع (حذف الحسابات والمرشحين تماماً)[cite: 1]</button>
+                    <!-- الزر الجديد المطلوب لإعادة الجولات من البداية مع الحفاظ على الحسابات والمرشحين -->
+                    <button class="btn btn-gold" onclick="resetRoundsOnly()"><i class="fa-solid fa-rotate-right"></i> إعادة جولات البطولة من البداية (الجولة 1)</button>
+                    <button class="btn btn-danger" onclick="adminResetElection()"><i class="fa-solid fa-trash-can"></i> إعادة ضبط المصنع (حذف الحسابات والمرشحين تماماً)[cite: 1]</button>
                 </div>
             </div>
         </section>
@@ -474,9 +476,26 @@
             switchView('arena');
         };
 
-        // زر إعادة ضبط المصنع المحسّن لمسح كل الحسابات والمرشحين وتصفير السيرفر بالكامل
+        // دالة الزر الجديد: إعادة جولات البطولة فقط للبداية مع الحفاظ على الحسابات والمرشحين
+        window.resetRoundsOnly = function() {
+            if(confirm('هل تريد إعادة جولات البطولة لتصبح من الجولة 1 مع الحفاظ على الحسابات والمرشحين؟')) {
+                set(ref(db, 'settings/currentRound'), 1);
+                set(ref(db, 'settings/votingEndTime'), 0);
+                set(ref(db, 'settings/regFinished'), true);
+                
+                document.getElementById('matchupArea').style.display = 'none';
+                document.getElementById('wheelArea').style.display = 'block';
+                document.getElementById('spinStatusText').innerText = 'اضغط لتدوير العجلة للجولة الأولى';
+                document.getElementById('wheelSpinner').innerText = 'جاهز';
+                
+                alert('تمت إعادة ضبط الجولات بنجاح لتصبح من الجولة 1!');
+                switchView('arena');
+            }
+        };
+
+        // زر إعادة ضبط المصنع الشامل (يحذف الحسابات والمرشحين بالكامل)
         window.adminResetElection = function() {
-            if(confirm('هل أنت متأكد من مسح جميع الحسابات والمرشحين بالكامل والبدء من جديد؟[cite: 1]')) {
+            if(confirm('تحذير: هل أنت متأكد من مسح جميع الحسابات والمرشحين بالكامل والبدء من جديد؟[cite: 1]')) {
                 Promise.all([
                     remove(ref(db, 'competitors')),
                     remove(ref(db, 'users')),
@@ -498,8 +517,8 @@
                     document.getElementById('wheelArea').style.display = 'none';
                     document.getElementById('matchupArea').style.display = 'none';
                     
-                    alert('تمت إعادة ضبط المصنع ومسح كافة الحسابات بنجاح[cite: 1]! أصبحت قاعدة البيانات نظيفة تماماً.');
-                    window.location.reload(); // إعادة تحميل الصفحة لتفريغ الذاكرة بالكامل
+                    alert('تمت إعادة ضبط المصنع ومسح كافة الحسابات بنجاح[cite: 1]!');
+                    window.location.reload();
                 });
             }
         };
