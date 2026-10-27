@@ -237,7 +237,7 @@
 
                 <div style="display: flex; gap: 15px; flex-wrap: wrap; margin-top: 1.5rem;">
                     <button class="btn" onclick="forceCloseRegAndStartArena()"><i class="fa-solid fa-lock"></i> إغلاق التسجيل وبدء ساحة المواجهة فوراً[cite: 1]</button>
-                    <button class="btn btn-danger" onclick="adminResetElection()"><i class="fa-solid fa-rotate-left"></i> إعادة ضبط المصنع (مسح الحسابات والمتسابقين بالكامل)[cite: 1]</button>
+                    <button class="btn btn-danger" onclick="adminResetElection()"><i class="fa-solid fa-rotate-left"></i> إعادة ضبط المصنع (حذف الحسابات والمرشحين تماماً)[cite: 1]</button>
                 </div>
             </div>
         </section>
@@ -470,17 +470,17 @@
         window.forceCloseRegAndStartArena = function() {
             set(ref(db, 'settings/regFinished'), true);
             finishRegistrationTimeUI();
-            alert('تم إغلاق التسجيل وفتح ساحة المواجهة![cite: 1]');
+            alert('تم إغلاق التسجيل وفتح ساحة المواجهة[cite: 1]!');
             switchView('arena');
         };
 
-        // زر إعادة ضبط المصنع: يحذف الحسابات والمتسابقين بالكامل ويبقي الاتصال بسيرفر Firebase
+        // زر إعادة ضبط المصنع المحسّن لمسح كل الحسابات والمرشحين وتصفير السيرفر بالكامل
         window.adminResetElection = function() {
-            if(confirm('هل أنت متأكد من مسح الحسابات والمرشحين بالكامل والبدء من جديد؟[cite: 1]')) {
-                // مسح المتسابقين والحسابات معاً من قاعدة بيانات Firebase
+            if(confirm('هل أنت متأكد من مسح جميع الحسابات والمرشحين بالكامل والبدء من جديد؟[cite: 1]')) {
                 Promise.all([
                     remove(ref(db, 'competitors')),
-                    remove(ref(db, 'users'))
+                    remove(ref(db, 'users')),
+                    remove(ref(db, 'settings'))
                 ]).then(() => {
                     const newRegEnd = Date.now() + 30 * 60 * 1000;
                     set(ref(db, 'settings/regEndTime'), newRegEnd);
@@ -498,8 +498,8 @@
                     document.getElementById('wheelArea').style.display = 'none';
                     document.getElementById('matchupArea').style.display = 'none';
                     
-                    alert('تمت إعادة ضبط المصنع ومسح الحسابات والمرشحين بنجاح! الموقع جاهز لحسابات جديدة.');
-                    switchView('home');
+                    alert('تمت إعادة ضبط المصنع ومسح كافة الحسابات بنجاح[cite: 1]! أصبحت قاعدة البيانات نظيفة تماماً.');
+                    window.location.reload(); // إعادة تحميل الصفحة لتفريغ الذاكرة بالكامل
                 });
             }
         };
@@ -582,3 +582,7 @@
     </script>
 </body>
 </html>
+
+
+
+
