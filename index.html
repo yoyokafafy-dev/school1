@@ -91,21 +91,21 @@
     </header>
 
     <main>
-        <!-- ساحة المواجهة وعجلة الحظ (الصفحة الافتتاحية) -->
+        <!-- ساحة المواجهة وعجلة الحظ (الصفحة الافتتاحية عند الدخول) -->
         <section id="arena" class="section-view active">
             <div class="card">
                 <h2><i class="fa-solid fa-chess-board"></i> ساحة المواجهة وعجلة الحظ الذكية</h2>
                 
                 <div id="arenaLockedAlert" class="alert-box" style="background: rgba(239,68,68,0.1); border-color: var(--danger); color: #FCA5A5;">
-                    <i class="fa-solid fa-hourglass-half"></i> لم يتم بدء الجولات بعد أو أن الوقت لم يحن. يرجى الانتظار لحين قيام الأدمن بتدوير عجلة الحظ!
+                    <i class="fa-solid fa-hourglass-half"></i> مرحلة التسجيل جارية أو أن الجولات لم تبدأ بعد. انتظر إغلاق التسجيل من الأدمن لتدوير العجلة!
                 </div>
 
                 <div id="wheelArea" style="display:none; text-align:center; background:#0A192F; padding:2rem; border-radius:12px; border:2px solid var(--gold);">
-                    <h3 style="color:var(--gold);"><i class="fa-solid fa-dharmachakra"></i> عجلة الحظ التفاعلية (خاصة بالأدمن فقط)</h3>
-                    <p id="spinStatusText" style="color:#94A3B8; margin:10px 0;">الأدمن وحده يمكنه تدوير العجلة لاختيار المتنافسين وإظهارهم للجميع</p>
+                    <h3 style="color:var(--gold);"><i class="fa-solid fa-dharmachakra"></i> عجلة الحظ التفاعلية</h3>
+                    <p id="spinStatusText" style="color:#94A3B8; margin:10px 0;">الأدمن وحده يمكنه تدوير العجلة لاختيار المتنافسين وإظهارهم للجميع لحظياً</p>
                     <div style="width:160px; height:160px; border:6px solid var(--gold); border-radius:50%; margin:20px auto; display:flex; align-items:center; justify-content:center; background: radial-gradient(circle, var(--gold-light), var(--gold)); font-weight:900; color:var(--primary-navy); font-size:1.1rem; box-shadow:0 0 20px rgba(212,175,55,0.4);" id="wheelSpinner">جاهز</div>
                     <button id="btnSpinWheel" class="btn btn-gold" onclick="spinWheelTwice()" style="display:none;"><i class="fa-solid fa-rotate"></i> تدوير عجلة الحظ (للأدمن)</button>
-                    <p id="notAdminNotice" style="color: #F87171; font-weight: bold; margin-top: 10px; display: none;"><i class="fa-solid fa-triangle-exclamation"></i> عذراً، تدوير العجلة متاح للأدمن فقط.</p>
+                    <p id="notAdminNotice" style="color: #F87171; font-weight: bold; margin-top: 10px; display: none;"><i class="fa-solid fa-triangle-exclamation"></i> تدوير العجلة متاح للأدمن فقط.</p>
                 </div>
 
                 <div id="matchupArea" style="display:none; margin-top:2rem;">
@@ -134,7 +134,7 @@
 
                     <div style="text-align:center; margin-top:2rem;" id="aiFinishContainer">
                         <button class="btn btn-gold" onclick="aiDeclareWinner()" id="btnAiFinish" style="display:none;"><i class="fa-solid fa-robot"></i> الذكاء الاصطناعي: إنهاء الجولة وإعلان الفائز</button>
-                        <p id="aiWaitingText" style="color: #94A3B8; margin-top: 10px; font-size: 0.9rem;"><i class="fa-solid fa-circle-notch fa-spin"></i> الذكاء الاصطناعي يراقب الأصوات وسيُعلن الفائز تلقائياً عند انتهاء الـ 90 دقيقة أو بقرار الأدمن.</p>
+                        <p id="aiWaitingText" style="color: #94A3B8; margin-top: 10px; font-size: 0.9rem;"><i class="fa-solid fa-circle-notch fa-spin"></i> الذكاء الاصطناعي يراقب الأصوات وسيعلن الفائز تلقائياً عند انتهاء الـ 90 دقيقة أو بقرار الأدمن.</p>
                     </div>
                 </div>
             </div>
@@ -144,8 +144,8 @@
         <section id="register" class="section-view">
             <div class="card">
                 <h2><i class="fa-solid fa-boxes-stacked"></i> قائمة الصناديق الـ 100 للمسجلين</h2>
-                <div class="alert-box">
-                    <i class="fa-solid fa-clock"></i> مرحلة التسجيل المفتوحة: <span id="regTimerCount" style="font-size: 1.2rem; margin-right: 5px;">جاري التحميل...</span>
+                <div class="alert-box" id="regAlertBox">
+                    <i class="fa-solid fa-clock"></i> مرحلة التسجيل: <span id="regTimerCount" style="font-size: 1.2rem; margin-right: 5px;">مفتوحة</span>
                 </div>
 
                 <div id="registrationFormArea" style="background: #0A192F; padding: 1.5rem; border-radius: 12px; margin-bottom: 2rem;">
@@ -163,16 +163,20 @@
                     </form>
                 </div>
 
+                <div id="regClosedNotice" style="display:none;" class="alert-box" style="background: rgba(239,68,68,0.1); border-color: var(--danger); color: #FCA5A5;">
+                    <i class="fa-solid fa-lock"></i> تم إغلاق باب التسجيل نهائياً من قِبل الأدمن!
+                </div>
+
                 <h3 style="color: var(--white); margin-top: 1rem;">الصناديق المتاحة (<span id="compCountDisplay">0</span> / 100)</h3>
                 <div class="registration-grid" id="registrationGrid"></div>
             </div>
         </section>
 
-        <!-- لوحة المتصدرين في الجولات (الجديدة) -->
+        <!-- لوحة المتصدرين في الجولات -->
         <section id="roundWinners" class="section-view">
             <div class="card">
                 <h2><i class="fa-solid fa-list-check" style="color: var(--gold);"></i> لوحة المتصدرين في الجولات</h2>
-                <p style="color:#94A3B8; margin-bottom:1.5rem;">هنا تجد سجل الفائزين بكل جولة من جولات البطولة الـ 15:</p>
+                <p style="color:#94A3B8; margin-bottom:1.5rem;">سجل الفائزين بكل جولة من جولات البطولة الـ 15:</p>
                 <div id="roundWinnersList">
                     <p style="color: #64748B; text-align: center; padding: 2rem;">لم يتم إنهاء أي جولة بعد...</p>
                 </div>
@@ -195,7 +199,7 @@
         <section id="auth" class="section-view">
             <div class="card" style="max-width: 450px; margin: 0 auto;">
                 <h2><i class="fa-solid fa-lock"></i> تسجيل الدخول / حساب الأدمن</h2>
-                <p style="color:#94A3B8; font-size:0.85rem; margin-bottom:1.5rem;">(أول شخص يسجل حساباً يصبح الأدمن ويتم حفظ دخوله تلقائياً على جهازك)</p>
+                <p style="color:#94A3B8; font-size:0.85rem; margin-bottom:1.5rem;">(أول شخص يسجل حساباً يصبح الأدمن ويتم حفظ دخوله تلقائياً)</p>
                 <div class="form-group">
                     <label>اسم المستخدم أو الإيميل:</label>
                     <input type="text" id="authEmail" placeholder="أدخل البريد أو اسم المستخدم...">
@@ -268,14 +272,12 @@
             competitors: [],
             selectedComp1: null,
             selectedComp2: null,
-            spinStep: 1,
             votes1: 0,
             votes2: 0,
             currentRound: 1,
             roundWinners: []
         };
 
-        // التحقق من الحساب المحفوظ مسبقاً في المتصفح لتسجيل الدخول التلقائي
         window.addEventListener('DOMContentLoaded', () => {
             const savedUser = localStorage.getItem('school_election_user');
             const savedIsAdmin = localStorage.getItem('school_election_isAdmin') === 'true';
@@ -286,28 +288,30 @@
             }
         });
 
-        // مزامنة الإعدادات والعدادات سحابياً
         onValue(ref(db, 'settings'), (snapshot) => {
             const settings = snapshot.val() || {};
-            const regEndTime = settings.regEndTime || (Date.now() + 30 * 60 * 1000); 
             const votingEndTime = settings.votingEndTime || 0;
             state.currentRound = settings.currentRound || 1;
+            const regFinished = settings.regFinished || false;
             
             document.getElementById('currentRoundDisplay').innerText = `${state.currentRound} من 15`;
             document.getElementById('adminRoundCount').innerText = `${state.currentRound} / 15`;
 
-            if(!settings.regEndTime) {
-                set(ref(db, 'settings/regEndTime'), regEndTime);
-                set(ref(db, 'settings/currentRound'), 1);
+            // التحكم في إظهار أو إخفاء استمارة التسجيل بناءً على حالة السيرفر
+            if (regFinished) {
+                document.getElementById('registrationFormArea').style.display = 'none';
+                document.getElementById('regClosedNotice').style.display = 'flex';
+                document.getElementById('regTimerCount').innerText = 'مغلق';
+            } else {
+                document.getElementById('registrationFormArea').style.display = 'block';
+                document.getElementById('regClosedNotice').style.display = 'none';
+                document.getElementById('regTimerCount').innerText = 'مفتوحة';
             }
 
-            runCloudRegTimer(regEndTime, settings.regFinished || false);
-            
             if (votingEndTime > 0) {
                 runCloudVotingTimer(votingEndTime);
             }
 
-            // فحص حالة العجلة والمتنافسين المختارين سحابياً
             if (settings.matchupActive && settings.comp1 && settings.comp2) {
                 document.getElementById('arenaLockedAlert').style.display = 'none';
                 document.getElementById('wheelArea').style.display = 'none';
@@ -325,12 +329,11 @@
                 document.getElementById('c2Photo').src = state.selectedComp2.photo;
                 document.getElementById('c2Name').innerText = state.selectedComp2.name;
                 document.getElementById('c2Votes').innerText = state.votes2;
-            } else if (settings.regFinished) {
+            } else if (regFinished) {
                 document.getElementById('arenaLockedAlert').style.display = 'none';
                 document.getElementById('wheelArea').style.display = 'block';
                 document.getElementById('matchupArea').style.display = 'none';
                 
-                // إظهار زر العجلة للأدمن فقط وحجبها عن الباقين
                 if (state.isAdmin) {
                     document.getElementById('btnSpinWheel').style.display = 'inline-flex';
                     document.getElementById('notAdminNotice').style.display = 'none';
@@ -345,7 +348,6 @@
             }
         });
 
-        // مزامنة سجل الفائزين في الجولات للوحة المتصدرين
         onValue(ref(db, 'roundWinners'), (snapshot) => {
             const data = snapshot.val() || {};
             state.roundWinners = Object.values(data);
@@ -367,24 +369,6 @@
             });
         }
 
-        function runCloudRegTimer(endTime, isFinished) {
-            clearInterval(window.cloudRegInterval);
-            if(isFinished) return;
-
-            window.cloudRegInterval = setInterval(() => {
-                const now = Date.now();
-                const timeLeft = Math.max(0, Math.floor((endTime - now) / 1000));
-
-                let m = Math.floor(timeLeft / 60).toString().padStart(2,'0');
-                let s = (timeLeft % 60).toString().padStart(2,'0');
-                document.getElementById('regTimerCount').innerText = `${m}:${s} دقيقة متبقية`;
-
-                if(timeLeft <= 0) {
-                    document.getElementById('registrationFormArea').style.display = 'none';
-                }
-            }, 1000);
-        }
-
         function runCloudVotingTimer(endTime) {
             clearInterval(window.cloudVoteInterval);
             window.cloudVoteInterval = setInterval(() => {
@@ -395,7 +379,6 @@
                 let s = (timeLeft % 60).toString().padStart(2,'0');
                 document.getElementById('voteTimerCount').innerText = `${m}:${s}`;
 
-                // إذا انتهى الـ 90 دقيقة، يقوم الذكاء الاصطناعي بإعلان الفائز تلقائياً إذا كان أدمن أو يتم التنبيه
                 if(timeLeft <= 0) {
                     clearInterval(window.cloudVoteInterval);
                     if(state.isAdmin) {
@@ -448,7 +431,6 @@
             }
         });
 
-        // تدوير عجلة الحظ (للأدمن فقط وتظهر النتيجة للجميع سحابياً)
         window.spinWheelTwice = function() {
             if(!state.isAdmin) return alert('عذراً، تدوير عجلة الحظ متاح للأدمن فقط!');
             if(state.competitors.length < 2) return alert('يجب تسجيل متسابقين اثنين على الأقل لبدء الجولة!');
@@ -469,7 +451,6 @@
                 let comp2 = state.competitors[idx2];
                 let votingEndTime = Date.now() + 90 * 60 * 1000;
 
-                // تحديث السيرفر بالمتنافسين الجدد ليراهم كل من في الموقع فوراً
                 set(ref(db, 'settings/matchupActive'), true);
                 set(ref(db, 'settings/comp1'), comp1);
                 set(ref(db, 'settings/comp2'), comp2);
@@ -493,7 +474,6 @@
             alert('تم تسجيل صوتك بنجاح في السحابة!');
         };
 
-        // الذكاء الاصطناعي لإعلان الفائز وحفظه في لوحة المتصدرين للجولات
         window.aiDeclareWinner = function() {
             if(!state.isAdmin) return;
             let winnerObj = state.votes1 >= state.votes2 ? state.selectedComp1 : state.selectedComp2;
@@ -501,7 +481,6 @@
 
             alert(`🤖 [الذكاء الاصطناعي]: بعد تحليل الأصوات، الفائز في الجولة ${state.currentRound} هو: ${winnerName}!`);
 
-            // حفظ الفائز في جدول الجولات
             const newWinnerRef = push(ref(db, 'roundWinners'));
             set(newWinnerRef, { round: state.currentRound, winner: winnerName });
 
@@ -511,7 +490,7 @@
                 set(ref(db, 'settings/matchupActive'), false);
                 set(ref(db, 'settings/votingEndTime'), 0);
             } else {
-                alert('🏆 انتهت الـ 15 جولة بالكامل! تم بتتويج بطل أبطال المدارس نهائياً.');
+                alert('🏆 انتهت الـ 15 جولة بالكامل! تم تتويج بطل أبطال المدارس نهائياً.');
                 document.getElementById('championNameDisplay').innerText = winnerName;
                 switchView('leaderboard');
             }
@@ -519,12 +498,12 @@
 
         window.forceCloseRegAndStartArena = function() {
             set(ref(db, 'settings/regFinished'), true);
-            alert('تم إغلاق التسجيل وفتح ساحة المواجهة للأدمن لتدوير العجلة!');
+            alert('تم إغلاق التسجيل نهائياً وفتح ساحة المواجهة وعجلة الحظ!');
             switchView('arena');
         };
 
         window.resetRoundsOnly = function() {
-            if(confirm('هل تريد إعادة جولات البطولة لتصبح من الجولة 1 مع الحفاظ على الحسابات والمرشحين؟')) {
+            if(confirm('هل تريد إعادة جولات البطولة لتصبح من الجولة 1؟')) {
                 set(ref(db, 'settings/currentRound'), 1);
                 set(ref(db, 'settings/votingEndTime'), 0);
                 set(ref(db, 'settings/matchupActive'), false);
@@ -563,7 +542,6 @@
                 set(ref(db, 'users/' + userKey), { email, pass, isAdmin: isFirst }).then(() => {
                     state.currentUser = email;
                     state.isAdmin = isFirst;
-                    // حفظ الدخول تلقائياً في المتصفح
                     localStorage.setItem('school_election_user', email);
                     localStorage.setItem('school_election_isAdmin', isFirst);
 
@@ -586,7 +564,6 @@
                 if(u && u.pass === pass) {
                     state.currentUser = u.email;
                     state.isAdmin = u.isAdmin;
-                    // حفظ الدخول تلقائياً في المتصفح
                     localStorage.setItem('school_election_user', u.email);
                     localStorage.setItem('school_election_isAdmin', u.isAdmin);
 
@@ -637,7 +614,6 @@
     </script>
 </body>
 </html>
-
 
 
 
