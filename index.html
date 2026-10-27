@@ -80,7 +80,8 @@
                 <li><button onclick="switchView('register')"><i class="fa-solid fa-users"></i> صناديق المتسابقين (100)</button></li>
                 <li><button onclick="switchView('arena')"><i class="fa-solid fa-chess-board"></i> ساحة المواجهة وعجلة الحظ</button></li>
                 <li><button onclick="switchView('leaderboard')"><i class="fa-solid fa-trophy"></i> لوحة المتصدرين والجوائز</button></li>
-                <li id="navAdminItem" style="display:none;"><button onclick="switchView('admin')" class="admin-badge"><i class="fa-solid fa-gauge"></i> لوحة التحكم والأقسام</button></li>
+                <!-- زر الأدمن سيظهر هنا تلقائياً عند تسجيل الدخول بحساب المسؤول -->
+                <li id="navAdminItem" style="display:none;"><button onclick="switchView('admin')" class="admin-badge"><i class="fa-solid fa-gauge"></i> لوحة تحكم الأدمن</button></li>
                 <li id="authNavItem"><button onclick="switchView('auth')" class="btn-gold"><i class="fa-solid fa-right-to-bracket"></i> تسجيل الدخول</button></li>
                 <li id="userGreeting" style="display:none; color: var(--gold); font-weight:700;"></li>
                 <li id="logoutNavItem" style="display:none;"><button onclick="logout()" class="btn-danger">خروج</button></li>
@@ -95,7 +96,7 @@
                 <i class="fa-solid fa-award" style="font-size: 4rem; color: var(--gold); margin-bottom: 1rem;"></i>
                 <h2>مرحباً بكم في الموقع الرسمي لانتخابات المدارس</h2>
                 <p style="color: #94A3B8; max-width: 700px; margin: 1rem auto 2rem auto;">
-                    منصة رقمية متكاملة لإدارة المنافسات والتسجيل السحابي المباشر بدعم كامِل من Firebase وعدادات تنازلية سحابية لا تتوقف عند إغلاق المتصفح أو الأجهزة[cite: 1].
+                    منصة رقمية متكاملة لإدارة المنافسات والتسجيل السحابي المباشر بدعم كامِل من Firebase وعدادات تنازلية سحابية لا تتوقف عند إغلاق المتصفح[cite: 1].
                 </p>
                 <div style="display: flex; gap: 15px; justify-content: center;">
                     <button class="btn" onclick="switchView('register')"><i class="fa-solid fa-user-plus"></i> تصفح صناديق التسجيل</button>
@@ -247,7 +248,7 @@
         <p>جميع الحقوق محفوظة &copy; 2026 - منظومة الانتخابات المدرسية (مربوط سحابياً بالكامل)</p>
     </footer>
 
-    <!-- Firebase SDKs وربط العدادات السحابية الحقيقية -->
+    <!-- Firebase SDKs -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-app.js";
         import { getDatabase, ref, set, push, onValue, remove } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-database.js";
@@ -277,7 +278,6 @@
             currentRound: 1
         };
 
-        // مزامنة الإعدادات والعدادات السحابية
         onValue(ref(db, 'settings'), (snapshot) => {
             const settings = snapshot.val() || {};
             const regEndTime = settings.regEndTime || (Date.now() + 30 * 60 * 1000); 
@@ -294,7 +294,6 @@
 
             runCloudRegTimer(regEndTime, settings.regFinished || false);
             
-            // تشغيل عداد الجولة (90 دقيقة) سحابياً
             if (votingEndTime > 0) {
                 runCloudVotingTimer(votingEndTime);
             }
@@ -302,7 +301,6 @@
 
         function runCloudRegTimer(endTime, isFinished) {
             clearInterval(window.cloudRegInterval);
-            
             if(isFinished) {
                 finishRegistrationTimeUI();
                 return;
@@ -322,7 +320,6 @@
             }, 1000);
         }
 
-        // دالة تشغيل عداد التصويت سحابياً (90 دقيقة)
         function runCloudVotingTimer(endTime) {
             clearInterval(window.cloudVoteInterval);
             window.cloudVoteInterval = setInterval(() => {
@@ -335,7 +332,6 @@
 
                 if(timeLeft <= 0) {
                     clearInterval(window.cloudVoteInterval);
-                    alert('انتهى وقت التصويت لهذه الجولة!');
                 }
             }, 1000);
         }
@@ -347,7 +343,6 @@
             document.getElementById('wheelArea').style.display = 'block';
         }
 
-        // جلب المتسابقين سحابياً
         onValue(ref(db, 'competitors'), (snapshot) => {
             const data = snapshot.val() || {};
             state.competitors = Object.values(data);
@@ -371,7 +366,6 @@
             }
         }
 
-        // تسجيل متسابق جديد
         document.getElementById('competitorForm').addEventListener('submit', (e) => {
             e.preventDefault();
             if(state.competitors.length >= 100) return alert('عذراً، اكتمل العدد الأقصى (100 متسابق)!');
@@ -392,7 +386,6 @@
             }
         });
 
-        // عجلة الحظ (تدور مرتين وبدء عداد الـ 90 دقيقة سحابياً)
         window.spinWheelTwice = function() {
             if(state.competitors.length < 2) return alert('يجب تسجيل متسابقين اثنين على الأقل لبدء الجولة!');
             
@@ -421,7 +414,6 @@
                     state.selectedComp2 = state.competitors[idx2];
                     spinner.innerText = state.selectedComp2.name;
 
-                    // تعيين وقت انتهاء الجولة بـ 90 دقيقة وحفظه سحابياً
                     const votingEndTime = Date.now() + 90 * 60 * 1000;
                     set(ref(db, 'settings/votingEndTime'), votingEndTime);
 
@@ -464,7 +456,7 @@
             if(state.currentRound < 15) {
                 state.currentRound++;
                 set(ref(db, 'settings/currentRound'), state.currentRound);
-                set(ref(db, 'settings/votingEndTime'), 0); // تصفير وقت الجولة
+                set(ref(db, 'settings/votingEndTime'), 0);
                 document.getElementById('matchupArea').style.display = 'none';
                 document.getElementById('wheelArea').style.display = 'block';
                 document.getElementById('spinStatusText').innerText = 'اضغط لتدوير العجلة للجولة الجديدة';
@@ -479,12 +471,12 @@
         window.forceCloseRegAndStartArena = function() {
             set(ref(db, 'settings/regFinished'), true);
             finishRegistrationTimeUI();
-            alert('تم إغلاق التسجيل وفتح ساحة المواجهة!');
+            alert('تم إغلاق التسجيل وفتح ساحة المواجهة![cite: 1]');
             switchView('arena');
         };
 
         window.adminResetElection = function() {
-            if(confirm('هل أنت متأكد من تصفير الانتخابات والصناديق مع الحفاظ التام على الحسابات والأدمن؟')) {
+            if(confirm('هل أنت متأكد من تصفير الانتخابات والصناديق مع الحفاظ التام على الحسابات والأدمن؟[cite: 1]')) {
                 remove(ref(db, 'competitors')).then(() => {
                     const newRegEnd = Date.now() + 30 * 60 * 1000;
                     set(ref(db, 'settings/regEndTime'), newRegEnd);
@@ -497,13 +489,12 @@
                     document.getElementById('arenaLockedAlert').style.display = 'flex';
                     document.getElementById('wheelArea').style.display = 'none';
                     document.getElementById('matchupArea').style.display = 'none';
-                    alert('تمت إعادة ضبط المصنع بنجاح!');
+                    alert('تمت إعادة ضبط المصنع بنجاح![cite: 1]');
                     switchView('home');
                 });
             }
         };
 
-        // حسابات الأدمن والمستخدمين
         window.handleRegisterAccount = function() {
             const email = document.getElementById('authEmail').value;
             const pass = document.getElementById('authPassword').value;
@@ -517,7 +508,7 @@
                 set(ref(db, 'users/' + userKey), { email, pass, isAdmin: isFirst }).then(() => {
                     state.currentUser = email;
                     state.isAdmin = isFirst;
-                    alert(isFirst ? 'تم إنشاء الحساب، وأنت الأدمن الرئيسي للموقع!' : 'تم إنشاء الحساب بنجاح كعضو عادي.');
+                    alert(isFirst ? 'تم إنشاء الحساب، وأنت الأدمن الرئيسي للموقع![cite: 1]' : 'تم إنشاء الحساب بنجاح كعضو عادي.[cite: 1]');
                     updateAuthUI();
                     switchView('home');
                 });
@@ -538,7 +529,12 @@
                     state.isAdmin = u.isAdmin;
                     alert(`أهلاً بك ${u.email}`);
                     updateAuthUI();
-                    switchView('home');
+                    // إذا كان أدمن، قم بتحويله مباشرة للوحة التحكم ليرى الأزرار بوضوح
+                    if(state.isAdmin) {
+                        switchView('admin');
+                    } else {
+                        switchView('home');
+                    }
                 } else {
                     alert('بيانات الدخول غير صحيحة!');
                 }
