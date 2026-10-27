@@ -80,7 +80,6 @@
                 <li><button onclick="switchView('register')"><i class="fa-solid fa-users"></i> صناديق المتسابقين (100)</button></li>
                 <li><button onclick="switchView('arena')"><i class="fa-solid fa-chess-board"></i> ساحة المواجهة وعجلة الحظ</button></li>
                 <li><button onclick="switchView('leaderboard')"><i class="fa-solid fa-trophy"></i> لوحة المتصدرين والجوائز</button></li>
-                <!-- زر الأدمن سيظهر هنا تلقائياً عند تسجيل الدخول بحساب المسؤول -->
                 <li id="navAdminItem" style="display:none;"><button onclick="switchView('admin')" class="admin-badge"><i class="fa-solid fa-gauge"></i> لوحة تحكم الأدمن</button></li>
                 <li id="authNavItem"><button onclick="switchView('auth')" class="btn-gold"><i class="fa-solid fa-right-to-bracket"></i> تسجيل الدخول</button></li>
                 <li id="userGreeting" style="display:none; color: var(--gold); font-weight:700;"></li>
@@ -238,7 +237,7 @@
 
                 <div style="display: flex; gap: 15px; flex-wrap: wrap; margin-top: 1.5rem;">
                     <button class="btn" onclick="forceCloseRegAndStartArena()"><i class="fa-solid fa-lock"></i> إغلاق التسجيل وبدء ساحة المواجهة فوراً[cite: 1]</button>
-                    <button class="btn btn-danger" onclick="adminResetElection()"><i class="fa-solid fa-rotate-left"></i> إعادة ضبط المصنع (تصفير الانتخابات مع حفظ الحسابات)[cite: 1]</button>
+                    <button class="btn btn-danger" onclick="adminResetElection()"><i class="fa-solid fa-rotate-left"></i> إعادة ضبط المصنع (مسح الحسابات والمتسابقين بالكامل)[cite: 1]</button>
                 </div>
             </div>
         </section>
@@ -475,21 +474,31 @@
             switchView('arena');
         };
 
+        // زر إعادة ضبط المصنع: يحذف الحسابات والمتسابقين بالكامل ويبقي الاتصال بسيرفر Firebase
         window.adminResetElection = function() {
-            if(confirm('هل أنت متأكد من تصفير الانتخابات والصناديق مع الحفاظ التام على الحسابات والأدمن؟[cite: 1]')) {
-                remove(ref(db, 'competitors')).then(() => {
+            if(confirm('هل أنت متأكد من مسح الحسابات والمرشحين بالكامل والبدء من جديد؟[cite: 1]')) {
+                // مسح المتسابقين والحسابات معاً من قاعدة بيانات Firebase
+                Promise.all([
+                    remove(ref(db, 'competitors')),
+                    remove(ref(db, 'users'))
+                ]).then(() => {
                     const newRegEnd = Date.now() + 30 * 60 * 1000;
                     set(ref(db, 'settings/regEndTime'), newRegEnd);
                     set(ref(db, 'settings/regFinished'), false);
                     set(ref(db, 'settings/currentRound'), 1);
                     set(ref(db, 'settings/votingEndTime'), 0);
                     
+                    state.currentUser = null;
+                    state.isAdmin = false;
+                    updateAuthUI();
+
                     document.getElementById('registrationFormArea').style.display = 'block';
                     document.getElementById('regClosedMessage').style.display = 'none';
                     document.getElementById('arenaLockedAlert').style.display = 'flex';
                     document.getElementById('wheelArea').style.display = 'none';
                     document.getElementById('matchupArea').style.display = 'none';
-                    alert('تمت إعادة ضبط المصنع بنجاح![cite: 1]');
+                    
+                    alert('تمت إعادة ضبط المصنع ومسح الحسابات والمرشحين بنجاح! الموقع جاهز لحسابات جديدة.');
                     switchView('home');
                 });
             }
@@ -510,7 +519,11 @@
                     state.isAdmin = isFirst;
                     alert(isFirst ? 'تم إنشاء الحساب، وأنت الأدمن الرئيسي للموقع![cite: 1]' : 'تم إنشاء الحساب بنجاح كعضو عادي.[cite: 1]');
                     updateAuthUI();
-                    switchView('home');
+                    if(state.isAdmin) {
+                        switchView('admin');
+                    } else {
+                        switchView('home');
+                    }
                 });
             }, { onlyOnce: true });
         };
@@ -529,7 +542,6 @@
                     state.isAdmin = u.isAdmin;
                     alert(`أهلاً بك ${u.email}`);
                     updateAuthUI();
-                    // إذا كان أدمن، قم بتحويله مباشرة للوحة التحكم ليرى الأزرار بوضوح
                     if(state.isAdmin) {
                         switchView('admin');
                     } else {
