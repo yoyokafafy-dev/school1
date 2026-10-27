@@ -95,7 +95,7 @@
                 <i class="fa-solid fa-award" style="font-size: 4rem; color: var(--gold); margin-bottom: 1rem;"></i>
                 <h2>مرحباً بكم في الموقع الرسمي لانتخابات المدارس</h2>
                 <p style="color: #94A3B8; max-width: 700px; margin: 1rem auto 2rem auto;">
-                    منصة رقمية متكاملة لإدارة المنافسات والتسجيل السحابي المباشر بدعم كامِل من Firebase وعدادات تنازلية سحابية لا تتوقف عند إغلاق المتصفح أو الأجهزة.
+                    منصة رقمية متكاملة لإدارة المنافسات والتسجيل السحابي المباشر بدعم كامِل من Firebase وعدادات تنازلية سحابية لا تتوقف عند إغلاق المتصفح أو الأجهزة[cite: 1].
                 </p>
                 <div style="display: flex; gap: 15px; justify-content: center;">
                     <button class="btn" onclick="switchView('register')"><i class="fa-solid fa-user-plus"></i> تصفح صناديق التسجيل</button>
@@ -128,7 +128,7 @@
                 </div>
 
                 <div id="regClosedMessage" style="display:none;" class="alert-box" style="background: rgba(239,68,68,0.1); border-color: var(--danger); color: #FCA5A5;">
-                    <i class="fa-solid fa-lock"></i> تم إغلاق باب التسجيل وفتح ساحة المواجهات والجولات!
+                    <i class="fa-solid fa-lock"></i> تم إغلاق باب التسجيل وفتح ساحة المواجهات والجولات[cite: 1]!
                 </div>
 
                 <h3 style="color: var(--white); margin-top: 1rem;">الصناديق المتاحة (<span id="compCountDisplay">0</span> / 100)</h3>
@@ -139,14 +139,14 @@
         <!-- ساحة المواجهة وعجلة الحظ -->
         <section id="arena" class="section-view">
             <div class="card">
-                <h2><i class="fa-solid fa-chess-board"></i> ساحة المواجهة وعجلة الحظ</h2>
+                <h2><i class="fa-solid fa-chess-board"></i> ساحة المواجهة وعجلة الحظ[cite: 1]</h2>
                 
                 <div id="arenaLockedAlert" class="alert-box" style="background: rgba(239,68,68,0.1); border-color: var(--danger); color: #FCA5A5;">
-                    <i class="fa-solid fa-hourglass-half"></i> لم ينتهِ وقت التسجيل بعد! يرجى الانتظار لحين انتهاء العداد السحابي أو قيام الأدمن بفتح الجولات.
+                    <i class="fa-solid fa-hourglass-half"></i> لم ينتهِ وقت التسجيل بعد! يرجى الانتظار لحين انتهاء العداد السحابي أو قيام الأدمن بفتح الجولات[cite: 1].
                 </div>
 
                 <div id="wheelArea" style="display:none; text-align:center; background:#0A192F; padding:2rem; border-radius:12px; border:2px solid var(--gold);">
-                    <h3 style="color:var(--gold);"><i class="fa-solid fa-dharmachakra"></i> عجلة الحظ التفاعلية</h3>
+                    <h3 style="color:var(--gold);"><i class="fa-solid fa-dharmachakra"></i> عجلة الحظ التفاعلية[cite: 1]</h3>
                     <p id="spinStatusText" style="color:#94A3B8; margin:10px 0;">اضغط لتدوير العجلة واختيار المتنافسين تباعاً</p>
                     <div style="width:160px; height:160px; border:6px solid var(--gold); border-radius:50%; margin:20px auto; display:flex; align-items:center; justify-content:center; background: radial-gradient(circle, var(--gold-light), var(--gold)); font-weight:900; color:var(--primary-navy); font-size:1.1rem; box-shadow:0 0 20px rgba(212,175,55,0.4);" id="wheelSpinner">جاهز</div>
                     <button id="btnSpinWheel" class="btn btn-gold" onclick="spinWheelTwice()"><i class="fa-solid fa-rotate"></i> تدوير العجلة (اللفة 1)</button>
@@ -198,8 +198,8 @@
         <!-- تسجيل الدخول -->
         <section id="auth" class="section-view">
             <div class="card" style="max-width: 450px; margin: 0 auto;">
-                <h2><i class="fa-solid fa-lock"></i> تسجيل الدخول أو حساب الأدمن</h2>
-                <p style="color:#94A3B8; font-size:0.85rem; margin-bottom:1.5rem;">(أول شخص يقوم بإنشاء حساب في السحابة سيحصل تلقائياً على صلاحيات الأدمن الرئيسي)</p>
+                <h2><i class="fa-solid fa-lock"></i> تسجيل الدخول أو حساب الأدمن[cite: 1]</h2>
+                <p style="color:#94A3B8; font-size:0.85rem; margin-bottom:1.5rem;">(أول شخص يقوم بإنشاء حساب في السحابة سيحصل تلقائياً على صلاحيات الأدمن الرئيسي)[cite: 1]</p>
                 <div class="form-group">
                     <label>اسم المستخدم أو الإيميل:</label>
                     <input type="text" id="authEmail" placeholder="أدخل البريد أو اسم المستخدم...">
@@ -209,8 +209,8 @@
                     <input type="password" id="authPassword" placeholder="أدخل كلمة المرور...">
                 </div>
                 <div style="display:flex; gap:10px;">
-                    <button onclick="handleLogin()" class="btn" style="flex:1;"><i class="fa-solid fa-right-to-bracket"></i> دخول</button>
-                    <button onclick="handleRegisterAccount()" class="btn btn-gold" style="flex:1;"><i class="fa-solid fa-user-plus"></i> إنشاء حساب</button>
+                    <button onclick="handleLogin()" class="btn" style="flex:1;"><i class="fa-solid fa-right-to-bracket"></i> دخول[cite: 1]</button>
+                    <button onclick="handleRegisterAccount()" class="btn btn-gold" style="flex:1;"><i class="fa-solid fa-user-plus"></i> إنشاء حساب[cite: 1]</button>
                 </div>
             </div>
         </section>
@@ -218,12 +218,12 @@
         <!-- لوحة التحكم للأدمن -->
         <section id="admin" class="section-view">
             <div class="card">
-                <h2><i class="fa-solid fa-gauge-high"></i> لوحة تحكم الأدمن والتحكم السحابي</h2>
+                <h2><i class="fa-solid fa-gauge-high"></i> لوحة تحكم الأدمن والتحكم السحابي[cite: 1]</h2>
                 
                 <div class="dashboard-grid">
                     <div class="stat-card">
                         <h3>حالة النظام السحابي</h3>
-                        <div class="number" style="color: var(--success); font-size: 1.1rem;"><i class="fa-solid fa-circle-check"></i> متصل بـ Firebase</div>
+                        <div class="number" style="color: var(--success); font-size: 1.1rem;"><i class="fa-solid fa-circle-check"></i> متصل بـ Firebase[cite: 1]</div>
                     </div>
                     <div class="stat-card gold">
                         <h3>المتسابقون المسجلون</h3>
@@ -236,8 +236,8 @@
                 </div>
 
                 <div style="display: flex; gap: 15px; flex-wrap: wrap; margin-top: 1.5rem;">
-                    <button class="btn" onclick="forceCloseRegAndStartArena()"><i class="fa-solid fa-lock"></i> إغلاق التسجيل وبدء ساحة المواجهة فوراً</button>
-                    <button class="btn btn-danger" onclick="adminResetElection()"><i class="fa-solid fa-rotate-left"></i> إعادة ضبط المصنع (تصفير الانتخابات مع حفظ الحسابات)</button>
+                    <button class="btn" onclick="forceCloseRegAndStartArena()"><i class="fa-solid fa-lock"></i> إغلاق التسجيل وبدء ساحة المواجهة فوراً[cite: 1]</button>
+                    <button class="btn btn-danger" onclick="adminResetElection()"><i class="fa-solid fa-rotate-left"></i> إعادة ضبط المصنع (تصفير الانتخابات مع حفظ الحسابات)[cite: 1]</button>
                 </div>
             </div>
         </section>
@@ -277,10 +277,11 @@
             currentRound: 1
         };
 
-        // مزامنة الإعدادات والعدادات السحابية (تستمر في العد حتى لو أغلقت المتصفح أو الجهاز)
+        // مزامنة الإعدادات والعدادات السحابية
         onValue(ref(db, 'settings'), (snapshot) => {
             const settings = snapshot.val() || {};
-            const regEndTime = settings.regEndTime || (Date.now() + 30 * 60 * 1000); // 30 دقيقة افتراضياً
+            const regEndTime = settings.regEndTime || (Date.now() + 30 * 60 * 1000); 
+            const votingEndTime = settings.votingEndTime || 0;
             state.currentRound = settings.currentRound || 1;
             
             document.getElementById('currentRoundDisplay').innerText = `${state.currentRound} من 15`;
@@ -292,17 +293,22 @@
             }
 
             runCloudRegTimer(regEndTime, settings.regFinished || false);
+            
+            // تشغيل عداد الجولة (90 دقيقة) سحابياً
+            if (votingEndTime > 0) {
+                runCloudVotingTimer(votingEndTime);
+            }
         });
 
         function runCloudRegTimer(endTime, isFinished) {
-            clearInterval(window.cloudTimerInterval);
+            clearInterval(window.cloudRegInterval);
             
             if(isFinished) {
                 finishRegistrationTimeUI();
                 return;
             }
 
-            window.cloudTimerInterval = setInterval(() => {
+            window.cloudRegInterval = setInterval(() => {
                 const now = Date.now();
                 const timeLeft = Math.max(0, Math.floor((endTime - now) / 1000));
 
@@ -312,6 +318,24 @@
 
                 if(timeLeft <= 0) {
                     finishRegistrationTimeUI();
+                }
+            }, 1000);
+        }
+
+        // دالة تشغيل عداد التصويت سحابياً (90 دقيقة)
+        function runCloudVotingTimer(endTime) {
+            clearInterval(window.cloudVoteInterval);
+            window.cloudVoteInterval = setInterval(() => {
+                const now = Date.now();
+                const timeLeft = Math.max(0, Math.floor((endTime - now) / 1000));
+
+                let m = Math.floor(timeLeft / 60).toString().padStart(2,'0');
+                let s = (timeLeft % 60).toString().padStart(2,'0');
+                document.getElementById('voteTimerCount').innerText = `${m}:${s}`;
+
+                if(timeLeft <= 0) {
+                    clearInterval(window.cloudVoteInterval);
+                    alert('انتهى وقت التصويت لهذه الجولة!');
                 }
             }, 1000);
         }
@@ -368,7 +392,7 @@
             }
         });
 
-        // عجلة الحظ (تدور مرتين)
+        // عجلة الحظ (تدور مرتين وبدء عداد الـ 90 دقيقة سحابياً)
         window.spinWheelTwice = function() {
             if(state.competitors.length < 2) return alert('يجب تسجيل متسابقين اثنين على الأقل لبدء الجولة!');
             
@@ -396,6 +420,10 @@
 
                     state.selectedComp2 = state.competitors[idx2];
                     spinner.innerText = state.selectedComp2.name;
+
+                    // تعيين وقت انتهاء الجولة بـ 90 دقيقة وحفظه سحابياً
+                    const votingEndTime = Date.now() + 90 * 60 * 1000;
+                    set(ref(db, 'settings/votingEndTime'), votingEndTime);
 
                     alert(`تم اختيار المتنافسين بالجولة ${state.currentRound}:\n1️⃣ ${state.selectedComp1.name}\n2️⃣ ${state.selectedComp2.name}`);
 
@@ -436,6 +464,7 @@
             if(state.currentRound < 15) {
                 state.currentRound++;
                 set(ref(db, 'settings/currentRound'), state.currentRound);
+                set(ref(db, 'settings/votingEndTime'), 0); // تصفير وقت الجولة
                 document.getElementById('matchupArea').style.display = 'none';
                 document.getElementById('wheelArea').style.display = 'block';
                 document.getElementById('spinStatusText').innerText = 'اضغط لتدوير العجلة للجولة الجديدة';
@@ -461,6 +490,7 @@
                     set(ref(db, 'settings/regEndTime'), newRegEnd);
                     set(ref(db, 'settings/regFinished'), false);
                     set(ref(db, 'settings/currentRound'), 1);
+                    set(ref(db, 'settings/votingEndTime'), 0);
                     
                     document.getElementById('registrationFormArea').style.display = 'block';
                     document.getElementById('regClosedMessage').style.display = 'none';
@@ -544,5 +574,3 @@
     </script>
 </body>
 </html>
-
-
