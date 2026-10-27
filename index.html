@@ -53,6 +53,7 @@
         
         .btn { background: linear-gradient(135deg, var(--secondary-blue), var(--bright-blue)); color: var(--white); border: none; padding: 12px 24px; border-radius: 8px; font-size: 1rem; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; transition: 0.3s; }
         .btn:hover { opacity: 0.9; transform: translateY(-2px); }
+        .btn:disabled { background: #475569; cursor: not-allowed; opacity: 0.6; transform: none; }
         .btn-gold { background: linear-gradient(135deg, #B45309, var(--gold)); color: var(--primary-navy); font-weight: 900; }
         .btn-danger { background: var(--danger); }
         
@@ -91,7 +92,7 @@
     </header>
 
     <main>
-        <!-- ساحة المواجهة وعجلة الحظ (الصفحة الافتتاحية عند الدخول) -->
+        <!-- ساحة المواجهة وعجلة الحظ -->
         <section id="arena" class="section-view active">
             <div class="card">
                 <h2><i class="fa-solid fa-chess-board"></i> ساحة المواجهة وعجلة الحظ الذكية</h2>
@@ -114,12 +115,16 @@
                         | وقت التصويت المتبقي: <span id="voteTimerCount">90:00</span> دقيقة
                     </div>
 
+                    <div id="votedAlertBanner" class="alert-box" style="display:none; background: rgba(16,185,129,0.1); border-color: var(--success); color: #6EE7B7;">
+                        <i class="fa-solid fa-circle-check"></i> لقد قمت بالتصويت في هذه الجولة بنجاح! شكراً لمشاركتك.
+                    </div>
+
                     <div style="display: grid; grid-template-columns: 1fr auto 1fr; gap: 20px; align-items: center; text-align: center; margin-top: 1.5rem;">
                         <div style="background:#0A192F; padding:1.5rem; border-radius:12px; border:1px solid #334155;">
                             <img id="c1Photo" src="" style="width:100px; height:100px; border-radius:50%; object-fit:cover; border:3px solid var(--gold); margin-bottom:10px;">
                             <h3 id="c1Name" style="color:var(--white);">المتسابق 1</h3>
                             <p style="margin:10px 0; color:#94A3B8;">الأصوات: <span id="c1Votes" style="font-weight:bold; color:var(--bright-blue);">0</span></p>
-                            <button class="btn" onclick="castVote(1)"><i class="fa-solid fa-thumbs-up"></i> صوّت لهذا المتسابق</button>
+                            <button class="btn vote-btn" id="btnVote1" onclick="castVote(1)"><i class="fa-solid fa-thumbs-up"></i> صوّت لهذا المتسابق</button>
                         </div>
 
                         <div style="font-size:2rem; font-weight:900; color:var(--gold); background:#0A192F; width:60px; height:60px; border-radius:50%; display:flex; align-items:center; justify-content:center; border:2px solid var(--gold);">VS</div>
@@ -128,7 +133,7 @@
                             <img id="c2Photo" src="" style="width:100px; height:100px; border-radius:50%; object-fit:cover; border:3px solid var(--gold); margin-bottom:10px;">
                             <h3 id="c2Name" style="color:var(--white);">المتسابق 2</h3>
                             <p style="margin:10px 0; color:#94A3B8;">الأصوات: <span id="c2Votes" style="font-weight:bold; color:var(--bright-blue);">0</span></p>
-                            <button class="btn" onclick="castVote(2)"><i class="fa-solid fa-thumbs-up"></i> صوّت لهذا المتسابق</button>
+                            <button class="btn vote-btn" id="btnVote2" onclick="castVote(2)"><i class="fa-solid fa-thumbs-up"></i> صوّت لهذا المتسابق</button>
                         </div>
                     </div>
 
@@ -251,7 +256,7 @@
     <!-- Firebase SDKs -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-app.js";
-        import { getDatabase, ref, set, push, onValue, remove } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-database.js";
+        import { getDatabase, ref, set, push, onValue, remove, get } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-database.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCn1F739RLx8P7sG7Rd1NMy7j0kbbhBImE",
@@ -278,6 +283,23 @@
             roundWinners: []
         };
 
+        // توليد أو جلب معرف الفريد للجهاز لمنع التكرار للم الزائرين غير المسجلين
+        function getDeviceId() {
+            let devId = localStorage.getItem('school_election_device_id');
+            if (!devId) {
+                devId = 'dev_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now();
+                localStorage.setItem('school_election_device_id', devId);
+            }
+            return devId;
+        }
+
+        function getUserIdentifier() {
+            if (state.currentUser) {
+                return state.currentUser.replace(/[.#$\[\]]/g, "_");
+            }
+            return getDeviceId();
+        }
+
         window.addEventListener('DOMContentLoaded', () => {
             const savedUser = localStorage.getItem('school_election_user');
             const savedIsAdmin = localStorage.getItem('school_election_isAdmin') === 'true';
@@ -297,7 +319,6 @@
             document.getElementById('currentRoundDisplay').innerText = `${state.currentRound} من 15`;
             document.getElementById('adminRoundCount').innerText = `${state.currentRound} / 15`;
 
-            // التحكم في إظهار أو إخفاء استمارة التسجيل بناءً على حالة السيرفر
             if (regFinished) {
                 document.getElementById('registrationFormArea').style.display = 'none';
                 document.getElementById('regClosedNotice').style.display = 'flex';
@@ -329,6 +350,8 @@
                 document.getElementById('c2Photo').src = state.selectedComp2.photo;
                 document.getElementById('c2Name').innerText = state.selectedComp2.name;
                 document.getElementById('c2Votes').innerText = state.votes2;
+
+                checkIfUserAlreadyVoted();
             } else if (regFinished) {
                 document.getElementById('arenaLockedAlert').style.display = 'none';
                 document.getElementById('wheelArea').style.display = 'block';
@@ -347,6 +370,42 @@
                 document.getElementById('matchupArea').style.display = 'none';
             }
         });
+
+        // التحقق مما إذا كان هذا الجهاز أو الحساب قد قام بالتصويت مسبقاً في هذه الجولة
+        function checkIfUserAlreadyVoted() {
+            const userKey = getUserIdentifier();
+            const localVotedKey = `voted_round_${state.currentRound}_${userKey}`;
+
+            if (localStorage.getItem(localVotedKey) === 'true') {
+                disableVotingUI();
+                return;
+            }
+
+            get(ref(db, `votes/round_${state.currentRound}/${userKey}`)).then((snapshot) => {
+                if (snapshot.exists()) {
+                    localStorage.setItem(localVotedKey, 'true');
+                    disableVotingUI();
+                } else {
+                    enableVotingUI();
+                }
+            });
+        }
+
+        function disableVotingUI() {
+            document.getElementById('btnVote1').disabled = true;
+            document.getElementById('btnVote2').disabled = true;
+            document.getElementById('btnVote1').innerText = 'تم التصويت';
+            document.getElementById('btnVote2').innerText = 'تم التصويت';
+            document.getElementById('votedAlertBanner').style.display = 'flex';
+        }
+
+        function enableVotingUI() {
+            document.getElementById('btnVote1').disabled = false;
+            document.getElementById('btnVote2').disabled = false;
+            document.getElementById('btnVote1').innerHTML = '<i class="fa-solid fa-thumbs-up"></i> صوّت لهذا المتسابق';
+            document.getElementById('btnVote2').innerHTML = '<i class="fa-solid fa-thumbs-up"></i> صوّت لهذا المتسابق';
+            document.getElementById('votedAlertBanner').style.display = 'none';
+        }
 
         onValue(ref(db, 'roundWinners'), (snapshot) => {
             const data = snapshot.val() || {};
@@ -462,16 +521,41 @@
             }, 1500);
         };
 
+        // دالة التصويت المحمية (تسمح بصوت واحد فقط لكل حساب/جهاز في كل جولة)
         window.castVote = function(num) {
             if(!state.selectedComp1 || !state.selectedComp2) return;
-            if(num === 1) {
-                state.votes1++;
-                set(ref(db, 'settings/votes1'), state.votes1);
-            } else {
-                state.votes2++;
-                set(ref(db, 'settings/votes2'), state.votes2);
+            
+            const userKey = getUserIdentifier();
+            const localVotedKey = `voted_round_${state.currentRound}_${userKey}`;
+
+            if (localStorage.getItem(localVotedKey) === 'true') {
+                return alert('عذراً، لقد قمت بالتصويت في هذه الجولة مسبقاً ولا يمكنك التصويت مرة أخرى!');
             }
-            alert('تم تسجيل صوتك بنجاح في السحابة!');
+
+            const votePath = ref(db, `votes/round_${state.currentRound}/${userKey}`);
+
+            get(votePath).then((snapshot) => {
+                if (snapshot.exists()) {
+                    localStorage.setItem(localVotedKey, 'true');
+                    disableVotingUI();
+                    alert('عذراً، لقد قمت بالتصويت في هذه الجولة مسبقاً!');
+                } else {
+                    set(votePath, { votedFor: num, timestamp: Date.now() }).then(() => {
+                        localStorage.setItem(localVotedKey, 'true');
+
+                        if(num === 1) {
+                            state.votes1++;
+                            set(ref(db, 'settings/votes1'), state.votes1);
+                        } else {
+                            state.votes2++;
+                            set(ref(db, 'settings/votes2'), state.votes2);
+                        }
+
+                        disableVotingUI();
+                        alert('تم تسجيل صوتك بنجاح في السحابة!');
+                    });
+                }
+            });
         };
 
         window.aiDeclareWinner = function() {
@@ -509,6 +593,7 @@
                 set(ref(db, 'settings/matchupActive'), false);
                 set(ref(db, 'settings/regFinished'), true);
                 remove(ref(db, 'roundWinners'));
+                remove(ref(db, 'votes'));
                 alert('تمت إعادة ضبط الجولات بنجاح لتصبح من الجولة 1!');
                 switchView('arena');
             }
@@ -520,7 +605,8 @@
                     remove(ref(db, 'competitors')),
                     remove(ref(db, 'users')),
                     remove(ref(db, 'settings')),
-                    remove(ref(db, 'roundWinners'))
+                    remove(ref(db, 'roundWinners')),
+                    remove(ref(db, 'votes'))
                 ]).then(() => {
                     localStorage.clear();
                     alert('تمت إعادة ضبط المصنع ومسح كافة الحسابات بنجاح!');
@@ -614,6 +700,10 @@
     </script>
 </body>
 </html>
+
+
+
+
 
 
 
